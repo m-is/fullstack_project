@@ -1,18 +1,19 @@
-import { Entity, Property, Unique, OneToMany, Collection, Cascade } from "@mikro-orm/core";
+import { Entity, Property, Unique, OneToMany, Collection, Cascade, PrimaryKey } from "@mikro-orm/core";
 import { BaseEntity } from "./BaseEntity.js";
 import { Match } from "./Match.js";
 
 @Entity({ tableName: "users" })
 export class User extends BaseEntity {
 	@Property()
+	@PrimaryKey()
 	@Unique()
 	email!: string;
 
 	@Property()
-	name!: string;
-
+	username!: string;
+	
 	@Property()
-	petType!: string;
+	password!: string;
 
 	// Note that these DO NOT EXIST in the database itself!
 	@OneToMany(() => Match, (match) => match.owner, { cascade: [Cascade.PERSIST, Cascade.REMOVE] })

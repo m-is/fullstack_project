@@ -44,13 +44,13 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	// CRUD
 	// C
 	app.post<{ Body: ICreateUsersBody }>("/users", async (req, reply) => {
-		const { name, email, petType } = req.body;
+		const { username, email, password } = req.body;
 
 		try {
 			const newUser = await req.em.create(User, {
-				name,
 				email,
-				petType,
+				username,
+				password
 			});
 
 			await req.em.flush();
@@ -79,11 +79,10 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 
 	// UPDATE
 	app.put<{ Body: ICreateUsersBody }>("/users", async (req, reply) => {
-		const { name, email, petType } = req.body;
+		const { username, email, password } = req.body;
 
 		const userToChange = await req.em.findOne(User, { email });
-		userToChange.name = name;
-		userToChange.petType = petType;
+		userToChange.username = username;
 
 		// Reminder -- this is how we persist our JS object changes to the database itself
 		await req.em.flush();

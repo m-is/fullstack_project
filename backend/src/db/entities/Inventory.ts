@@ -1,4 +1,4 @@
-import { Entity, Property, Unique, Collection } from "@mikro-orm/core";
+import { Entity, Property, Unique, Collection, PrimaryKey } from "@mikro-orm/core";
 import { User } from "./User.js"
 
 /*
@@ -12,6 +12,7 @@ Items are bools, true for acquired, false for not acquired/used/broken/etc.
 export class Inventory {
 	//Inventory is tied to one specific user, a user may not have two inventories
 	@Unique()
+	@PrimaryKey()
 	@Property()
 	user!: User;
 	
