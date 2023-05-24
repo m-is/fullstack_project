@@ -1,4 +1,5 @@
-import { Entity, Property, Unique, Collection } from "@mikro-orm/core";
+import { Entity, Property, Unique, Collection, PrimaryKey, OneToOne} from "@mikro-orm/core";
+import type { Rel } from "@mikro-orm/core"
 import { User } from "./User.js"
 
 /*
@@ -17,9 +18,8 @@ user: this list will be tied to a user, it will reflect their location history
 @Entity()
 export class LocationHistory {
 	//
-	@Property()
-	@Unique()
-	user!: User;
+	@PrimaryKey()
+	user!: Rel<User>;
 	
 	//farm location will be discovered by default because it is the starting area
 	@Property()

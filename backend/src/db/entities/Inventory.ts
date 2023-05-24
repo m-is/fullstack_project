@@ -1,4 +1,5 @@
-import { Entity, Property, Unique, Collection, PrimaryKey } from "@mikro-orm/core";
+import { Entity, Property, Unique, Collection, PrimaryKey, OneToOne } from "@mikro-orm/core";
+import type { Rel } from "@mikro-orm/core"
 import { User } from "./User.js"
 
 /*
@@ -11,10 +12,8 @@ Items are bools, true for acquired, false for not acquired/used/broken/etc.
 @Entity()
 export class Inventory {
 	//Inventory is tied to one specific user, a user may not have two inventories
-	@Unique()
 	@PrimaryKey()
-	@Property()
-	user!: User;
+	user!: Rel<User>;
 	
 	//Shovel item, found at the farm when inspecting the shed
 	@Property()
