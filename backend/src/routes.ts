@@ -1,4 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { Inventory } from "./db/entities/Inventory.js";
+import { LocationHistory } from "./db/entities/LocationHistory.js";
 //import { Match } from "./db/entities/Match.js";
 import { User } from "./db/entities/User.js";
 import { ICreateUsersBody } from "./types.js";
@@ -21,6 +23,11 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	app.get("/dbTest", async (request: FastifyRequest, reply: FastifyReply) => {
 		return request.em.find(User, {});
 	});
+	
+	app.get("/inventoryTest", async (request: FastifyRequest, reply: FastifyReply) => {
+		return request.em.find(Inventory, {});
+	});
+	
 
 	// Core method for adding generic SEARCH http method
 	// app.route<{Body: { email: string}}>({
@@ -133,6 +140,68 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 			return reply.status(500).send(err);
 		}
 	});
+	
+	//Add item to inventory route
+	app.post<{Body: { item: string, email: string } }>("/inventory", async (req, reply) =>{
+		const { item, email } = req.body;
+		
+		try{
+		
+			const user = await req.em.findOne(User, {email});
+			const inventory = await req.em.findOne(Inventory, {user});
+		
+			switch(item){
+				case "shovel":
+					inventory.shovel = true;
+					break;
+				case "luckyCoin":
+					inventory.luckyCoin = true;
+					break;
+			}
+			
+			await req.em.flush;
+			return reply.send(`${item} added to ${email} user inventory`);
+		
+		} catch (err) {
+			console.error(err);
+			return reply.status(500).send(err);
+		}
+	})
+	
+	app.post<{Body: { location: string, email: string, value: number } }>("/inventory", async (req, reply) => {
+		const { location, email, value } = req.body;
+		
+		try {
+			const user = await req.em.findOne(User, { email });
+			const map = await req.em.findOne(LocationHistory, { user });
+			
+			switch (location) {
+				case "shovel":
+					map.farm = value;
+					break;
+				case "luckyCoin":
+					map.castleGate = value;
+					break;
+				case "outsideCastleWalls":
+					map.outsideCastleWalls = value;
+					break;
+				case "backstreets":
+					map.backstreets = value;
+					break;
+				case "townCenter":
+					map.townCenter = value;
+					break;
+			}
+			
+			await req.em.flush;
+			return reply.send(`${location} added to ${email} user map with value: ${value}`);
+			
+		} catch(err){
+			console.error(err);
+			return reply.status(500).send(err);
+			
+		}
+	})
 }
 
 export default DoggrRoutes;

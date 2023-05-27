@@ -17,9 +17,9 @@ export class Inventory {
 	
 	//Shovel item, found at the farm when inspecting the shed
 	@Property()
-	shovel: false;
+	shovel: boolean = false;
 	
 	//Lucky coin item, found at the city center when inspecting the fountain
 	@Property()
-	luckyCoin: false;
+	luckyCoin: boolean = false;
 }

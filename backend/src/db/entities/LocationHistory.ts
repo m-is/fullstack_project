@@ -23,26 +23,26 @@ export class LocationHistory {
 	
 	//farm location will be discovered by default because it is the starting area
 	@Property()
-	farm: 1;
+	farm: number = 1;
 	
 	//castlegate will be undiscovered/unvisited initially but will be discoverable
 	//by looking around at the farm
 	@Property()
-	castleGate: 0;
+	castleGate: number = 0;
 	
 	//outsideCastleWalls will be undiscovered/unvisited initially but will be discoverable
 	//by looking around at the castlegate
 	@Property()
-	outsideCastleWalls: 0;
+	outsideCastleWalls: number = 0;
 	
 	//backstreets will be undiscovered/unvisited initially but will be discoverable
 	//by using the shovel at the outsideCastleWalls location
 	@Property()
-	backstreets: 0;
+	backstreets: number = 0;
 	
 	//towncenter will be undiscovered/unvisited initially but will be discoverable by
 	//looking around in the backstreets
 	@Property()
-	townCenter: 0;
+	townCenter: number = 0;
 	
 }
