@@ -1,4 +1,4 @@
-import { Entity, Property, Unique, Collection, PrimaryKey, OneToOne, ManyToOne } from "@mikro-orm/core";
+import { Entity, PrimaryKey, ManyToOne } from "@mikro-orm/core";
 import type { Rel } from "@mikro-orm/core"
 import { User } from "./User.js"
 

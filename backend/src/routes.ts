@@ -86,7 +86,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 
 	// UPDATE
 	app.put<{ Body: ICreateUsersBody }>("/users", async (req, reply) => {
-		const { username, email, password } = req.body;
+		const { username, email } = req.body;
 
 		const userToChange = await req.em.findOne(User, { email });
 		userToChange.username = username;
@@ -119,9 +119,9 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 
 		try {
 			// make sure that the matchee exists & get their user account
-			const matchee = await req.em.findOne(User, { email: matchee_email });
+			//const matchee = await req.em.findOne(User, { email: matchee_email });
 			// do the same for the matcher/owner
-			const owner = await req.em.findOne(User, { email });
+			//const owner = await req.em.findOne(User, { email });
 
 			//create a new match between them
 			/*
@@ -153,8 +153,9 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 					name: item,
 				});
 				
+				
 				await req.em.flush;
-				return reply.send(`${item} added to ${email} user inventory`);
+				return reply.send(`${newItem.name} added to ${email} user inventory`);
 			
 		 
 		} catch (err) {
@@ -178,7 +179,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 			})
 			
 			await req.em.flush;
-			return reply.send(`${location} added to ${email} user map`);
+			return reply.send(`${newLocation.name} added to ${email} user map`);
 		} catch(err){
 			console.error(err);
 			return reply.status(500).send(err);
