@@ -146,68 +146,66 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 		const { item, email } = req.body;
 		try{
 			
-			/*
 				const user = await req.em.findOne(User, {email});
-				const inventory = await req.em.findOne(Item, {user});
-			
-				switch(item){
-					case "shovel":
-						inventory = true;
-						break;
-					case "luckyCoin":
-						inventory.luckyCoin = true;
-						break;
-				}
+				
+				const newItem = await req.em.create(Item, {
+					user,
+					name: item,
+				});
 				
 				await req.em.flush;
 				return reply.send(`${item} added to ${email} user inventory`);
-			*/
-			return reply.send();
+			
 		 
 		} catch (err) {
 			console.error(err);
 			return reply.status(500).send(err);
 		}
 	})
+	
 
 
-	//Add new location to Location	aka world map, or change the location from unvisited to visited
-	app.post<{Body: { location: string, email: string, value: number } }>("/location", async (req, reply) => {
-		const { location, email, value } = req.body;
+	//Add new location to User's world map
+	app.post<{Body: { location: string, email: string } }>("/location", async (req, reply) => {
+		const { location, email} = req.body;
 		
 		try {
-			/*
 			const user = await req.em.findOne(User, { email });
-			const map = await req.em.findOne(Location, { user });
-			
-			switch (location) {
-				case "shovel":
-					map.farm = value;
-					break;
-				case "luckyCoin":
-					map.castleGate = value;
-					break;
-				case "outsideCastleWalls":
-					map.outsideCastleWalls = value;
-					break;
-				case "backstreets":
-					map.backstreets = value;
-					break;
-				case "townCenter":
-					map.townCenter = value;
-					break;
-			}
+			const newLocation = await req.em.create(Location, {
+				user,
+				name: location,
+				visited: false
+			})
 			
 			await req.em.flush;
-			return reply.send(`${location} added to ${email} user map with value: ${value}`);
-			 */
-			return reply.send()
+			return reply.send(`${location} added to ${email} user map`);
 		} catch(err){
 			console.error(err);
 			return reply.status(500).send(err);
 			
 		}
 	})
+
+	//Change a user's location from unvisited to visted
+	app.post<{Body: { location: string, email: string } }>("/location", async (req, reply) => {
+		const { location, email} = req.body;
+		
+		try {
+		
+			const user = await req.em.findOne(User, { email });
+			const toVisit = await req.em.findOne(Location, { user, name: location })
+			
+			toVisit.visited = true;
+			
+			await req.em.flush;
+			return reply.send(`${location} has been visited on ${email} user map`);
+		}
+		catch(err) {
+			console.error(err);
+			return reply.status(500).send(err);
+		}
+	})
+
 }
 
 export default DoggrRoutes;
