@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { Inventory } from "./db/entities/Inventory.js";
-import { LocationHistory } from "./db/entities/LocationHistory.js";
+import { Item } from "./db/entities/Item.js";
+import { Location } from "./db/entities/Location.js";
 //import { Match } from "./db/entities/Match.js";
 import { User } from "./db/entities/User.js";
 import { ICreateUsersBody } from "./types.js";
@@ -25,7 +25,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	});
 	
 	app.get("/inventoryTest", async (request: FastifyRequest, reply: FastifyReply) => {
-		return request.em.find(Inventory, {});
+		return request.em.find(Item, {});
 	});
 	
 
@@ -144,36 +144,41 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	//Add item to inventory route
 	app.post<{Body: { item: string, email: string } }>("/inventory", async (req, reply) =>{
 		const { item, email } = req.body;
-		
 		try{
-		
-			const user = await req.em.findOne(User, {email});
-			const inventory = await req.em.findOne(Inventory, {user});
-		
-			switch(item){
-				case "shovel":
-					inventory.shovel = true;
-					break;
-				case "luckyCoin":
-					inventory.luckyCoin = true;
-					break;
-			}
 			
-			await req.em.flush;
-			return reply.send(`${item} added to ${email} user inventory`);
-		
+			/*
+				const user = await req.em.findOne(User, {email});
+				const inventory = await req.em.findOne(Item, {user});
+			
+				switch(item){
+					case "shovel":
+						inventory = true;
+						break;
+					case "luckyCoin":
+						inventory.luckyCoin = true;
+						break;
+				}
+				
+				await req.em.flush;
+				return reply.send(`${item} added to ${email} user inventory`);
+			*/
+			return reply.send();
+		 
 		} catch (err) {
 			console.error(err);
 			return reply.status(500).send(err);
 		}
 	})
-	
-	app.post<{Body: { location: string, email: string, value: number } }>("/inventory", async (req, reply) => {
+
+
+	//Add new location to Location	aka world map, or change the location from unvisited to visited
+	app.post<{Body: { location: string, email: string, value: number } }>("/location", async (req, reply) => {
 		const { location, email, value } = req.body;
 		
 		try {
+			/*
 			const user = await req.em.findOne(User, { email });
-			const map = await req.em.findOne(LocationHistory, { user });
+			const map = await req.em.findOne(Location, { user });
 			
 			switch (location) {
 				case "shovel":
@@ -195,7 +200,8 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 			
 			await req.em.flush;
 			return reply.send(`${location} added to ${email} user map with value: ${value}`);
-			
+			 */
+			return reply.send()
 		} catch(err){
 			console.error(err);
 			return reply.status(500).send(err);

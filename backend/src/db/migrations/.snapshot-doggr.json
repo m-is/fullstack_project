@@ -6,125 +6,6 @@
   "tables": [
     {
       "columns": {
-        "user": {
-          "name": "user",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "shovel": {
-          "name": "shovel",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "lucky_coin": {
-          "name": "lucky_coin",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        }
-      },
-      "name": "inventory",
-      "schema": "public",
-      "indexes": [
-        {
-          "keyName": "inventory_pkey",
-          "columnNames": [
-            "user"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {}
-    },
-    {
-      "columns": {
-        "user": {
-          "name": "user",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "farm": {
-          "name": "farm",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "castle_gate": {
-          "name": "castle_gate",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "outside_castle_walls": {
-          "name": "outside_castle_walls",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "backstreets": {
-          "name": "backstreets",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "town_center": {
-          "name": "town_center",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        }
-      },
-      "name": "location_history",
-      "schema": "public",
-      "indexes": [
-        {
-          "keyName": "location_history_pkey",
-          "columnNames": [
-            "user"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {}
-    },
-    {
-      "columns": {
         "id": {
           "name": "id",
           "type": "serial",
@@ -180,24 +61,6 @@
           "primary": false,
           "nullable": false,
           "mappedType": "string"
-        },
-        "items_user": {
-          "name": "items_user",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "map_user": {
-          "name": "map_user",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
         }
       },
       "name": "users",
@@ -213,24 +76,6 @@
           "unique": true
         },
         {
-          "columnNames": [
-            "items_user"
-          ],
-          "composite": false,
-          "keyName": "users_items_user_unique",
-          "primary": false,
-          "unique": true
-        },
-        {
-          "columnNames": [
-            "map_user"
-          ],
-          "composite": false,
-          "keyName": "users_map_user_unique",
-          "primary": false,
-          "unique": true
-        },
-        {
           "keyName": "users_pkey",
           "columnNames": [
             "id"
@@ -241,29 +86,116 @@
         }
       ],
       "checks": [],
-      "foreignKeys": {
-        "users_items_user_foreign": {
-          "constraintName": "users_items_user_foreign",
-          "columnNames": [
-            "items_user"
-          ],
-          "localTableName": "public.users",
-          "referencedColumnNames": [
-            "user"
-          ],
-          "referencedTableName": "public.inventory",
-          "updateRule": "cascade"
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
         },
-        "users_map_user_foreign": {
-          "constraintName": "users_map_user_foreign",
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "visited": {
+          "name": "visited",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "false",
+          "mappedType": "boolean"
+        }
+      },
+      "name": "location",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "location_pkey",
           "columnNames": [
-            "map_user"
+            "user_id"
           ],
-          "localTableName": "public.users",
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "location_user_id_foreign": {
+          "constraintName": "location_user_id_foreign",
+          "columnNames": [
+            "user_id"
+          ],
+          "localTableName": "public.location",
           "referencedColumnNames": [
-            "user"
+            "id"
           ],
-          "referencedTableName": "public.location_history",
+          "referencedTableName": "public.users",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "item",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "item_pkey",
+          "columnNames": [
+            "user_id",
+            "name"
+          ],
+          "composite": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "item_user_id_foreign": {
+          "constraintName": "item_user_id_foreign",
+          "columnNames": [
+            "user_id"
+          ],
+          "localTableName": "public.item",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.users",
           "updateRule": "cascade"
         }
       }

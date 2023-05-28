@@ -1,8 +1,8 @@
 import { Entity, Property, Unique, OneToMany, Collection, Cascade, PrimaryKey, OneToOne } from "@mikro-orm/core";
 import type { Rel } from "@mikro-orm/core"
 import { BaseEntity } from "./BaseEntity.js";
-import { Inventory } from "./Inventory.js";
-import { LocationHistory } from "./LocationHistory.js";
+import { Item } from "./Item.js";
+import { Location } from "./Location.js";
 //import { Match } from "./Match.js";
 
 @Entity({ tableName: "users" })
@@ -25,11 +25,11 @@ export class User extends BaseEntity {
 	@OneToMany(() => Match, (match) => match.matchee, { cascade: [Cascade.PERSIST, Cascade.REMOVE] })
 	matched_by!: Collection<Match>;
 	*/
-	@OneToOne({entity:() => Inventory})
-	items!: Rel<Inventory>;
-	
-	@OneToOne({entity: () => LocationHistory})
-	map!: Rel<LocationHistory>;
+	@OneToMany(() => Item, (item) => item.user, { cascade: [Cascade.PERSIST, Cascade.REMOVE] })
+	inventory!: Collection<Item>;
+
+	@OneToMany(() => Location, (location) => location.user, { cascade: [Cascade.PERSIST, Cascade.REMOVE] })
+	map!: Collection<Location>;
 	
   /* HW 1 NOTE!  We do NOT add Messages here!  This is the reason
    some of you needed Rel<> in your submission.  I gave an
