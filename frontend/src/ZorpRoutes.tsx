@@ -1,5 +1,6 @@
 import { Home } from "@/Components/Home.tsx";
 import { Login } from "@/Components/Login.tsx";
+import { SignUp } from "@/Components/SignUp.tsx";
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
 
@@ -12,8 +13,9 @@ export function ZorpRouter() {
 						
 						<ul className={"menu menu-horizontal"}>
 							<li><Link to="/">Home</Link></li>
-									<li><Link to="/login"> Login</Link></li>
-							</ul>
+							<li><Link to="/login"> Login</Link></li>
+							<li><Link to="/signup"> Sign-Up</Link></li>
+						</ul>
 					
 					</div>
 				</div>
@@ -22,6 +24,8 @@ export function ZorpRouter() {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/login" element={<Login />} />
+				<Route path="/signup" element={<SignUp />} />
+				
 			</Routes>
 		</div>
 	);
