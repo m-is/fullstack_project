@@ -62,9 +62,17 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 				username,
 				password:hashedPw
 			});
-
+			
 			await req.em.flush();
 
+			const newLocation = await req.em.create(Location, {
+				user: newUser,
+				name: "farm",
+				visited: false
+			})
+			
+			await req.em.flush();
+			
 			console.log("Created new user:", newUser);
 			return reply.send(newUser);
 		} catch (err) {
@@ -203,7 +211,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 		const { userId } = req.body;
 		
 		try{
-			const locations = await req.em.find(Location, {userId})
+			const locations = await req.em.find(Location, {user_id: userId})
 			return reply.send(locations);
 		} catch (err) {
 			return reply.status(500).send({message: err.message});
@@ -211,7 +219,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	})
 
 	//Change a user's location from unvisited to visted
-	app.post<{Body: { location: string, email: string } }>("/location", async (req, reply) => {
+	app.put<{Body: { location: string, email: string } }>("/location", async (req, reply) => {
 		const { location, email} = req.body;
 		
 		try {

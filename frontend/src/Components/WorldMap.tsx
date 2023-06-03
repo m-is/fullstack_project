@@ -45,7 +45,7 @@ export const WorldMap = () => {
 	
 	return (
 		<div>
-			{ map.includes("Farm") ? (
+			{ map.includes("farm") ? (
 				<FarmIcon />
 			) : null }
 			{ map.includes("castleGate") ? (

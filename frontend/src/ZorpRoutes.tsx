@@ -21,13 +21,13 @@ export function ZorpRouter() {
 							<li><Link to="/">Home</Link></li>
 							{auth?.token != null ? (
 								<>
-									<li><Link to="/login"> Login</Link></li>
-									<li><Link to="/signup"> Sign-Up</Link></li>
+									<li><Link to ="/map">World Map</Link></li>
+									<li><Link to ="/logout">Log-out</Link></li>
 								</>
 							) : (
 								<>
-									<li><Link to ="/map">World Map</Link></li>
-									<li><Link to ="/logout">Log-out</Link></li>
+									<li><Link to="/login"> Login</Link></li>
+									<li><Link to="/signup"> Sign-Up</Link></li>
 								</>
 							)}
 						</ul>

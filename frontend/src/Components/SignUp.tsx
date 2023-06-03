@@ -39,7 +39,7 @@ export const SignUp = () => {
 			});
 			
 		 */
-		httpClient.post("/users", {name, email, password})
+		httpClient.post("/users", {username:name, email, password})
 			.then( (response) => {
 				console.log(response.status);
 				if (response.status === 200) {
