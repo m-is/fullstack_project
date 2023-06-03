@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { Item } from "./db/entities/Item.js";
 import { Location } from "./db/entities/Location.js";
-//import { Match } from "./db/entities/Match.js";
+import bcrypt from "bcrypt";
 import { User } from "./db/entities/User.js";
 import { ICreateUsersBody } from "./types.js";
 
@@ -54,10 +54,13 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 		const { username, email, password } = req.body;
 
 		try {
+			
+			const hashedPw = await bcrypt.hash(password, 10);
+			
 			const newUser = await req.em.create(User, {
 				email,
 				username,
-				password
+				password:hashedPw
 			});
 
 			await req.em.flush();
@@ -113,28 +116,24 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 		}
 	});
 
-	// CREATE MATCH ROUTE
-	app.post<{ Body: { email: string; matchee_email: string } }>("/match", async (req, reply) => {
-		const { email, matchee_email } = req.body;
+	// Login route
+	app.post<{ Body: { email: string; password: string } }>("/login", async (req, reply) => {
+		const { email, password } = req.body;
 
 		try {
-			// make sure that the matchee exists & get their user account
-			//const matchee = await req.em.findOne(User, { email: matchee_email });
-			// do the same for the matcher/owner
-			//const owner = await req.em.findOne(User, { email });
-
-			//create a new match between them
-			/*
-			const newMatch = await req.em.create(Match, {
-				owner,
-				matchee,
-			});
-			*/
+			const theUser = await req.em.findOneOrFail(User, {email}, {strict: true})
 			
-			//persist it to the database
-			await req.em.flush();
-			// send the match back to the user
-			return reply.send();
+			const hashCompare = await bcrypt.compare(password, theUser.password);
+			
+			if(hashCompare) {
+				const userId = theUser.id;
+				const token = app.jwt.sign({userId});
+				
+				reply.send({token});
+			} else{
+				app.log.info(`Password validation failed -- ${password} vs ${theUser.password}`)
+				reply.status(401).send("Failed authentication, incorrect password");
+			}
 		} catch (err) {
 			console.error(err);
 			return reply.status(500).send(err);

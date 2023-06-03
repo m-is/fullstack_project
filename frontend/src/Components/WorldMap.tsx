@@ -31,5 +31,5 @@ export function TownCenterIcon() {
 	return(
 		//add onClick event to link to town center page/component
 		<img src={""} alt={"Icon for town center location"}/>
-	)
+	);
 }
