@@ -1,24 +1,24 @@
+import { useAuth } from "@/Services/Auth.tsx";
 import { useCallback, useState } from "react";
 
 export function Login() {
+	const context = useAuth();
 	
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [submitFailed, setSubmitFailed] = useState(false);
 	
 	const onSubmitLogin = useCallback(async () => {
-		/*
-		if (context) {
+		if(context) {
 			const loginSuccess = await context.handleLogin(email, password);
-			if (!loginSuccess) {
+			if(!loginSuccess) {
 				setSubmitFailed(true);
 			}
 		} else {
-			console.error("We have no auth context WARNING WARNING");
+			console.error("[WARNING] NO AUTH CONTEXT [WARNING]");
 		}
-		 */
 		
-	}, [email, password, setSubmitFailed]);
+	}, [email, password, context, setSubmitFailed]);
 	
 	return (
 		<div>

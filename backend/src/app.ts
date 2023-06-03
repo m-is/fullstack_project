@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import config from "./db/mikro-orm.config.js";
+import cors from '@fastify/cors';
 import { AuthPlugin } from "./plugins/auth.js";
 import { FastifySearchHttpMethodPlugin } from "./plugins/http_search.js";
 import { FastifyMikroOrmPlugin } from "./plugins/mikro.js";
@@ -34,6 +35,13 @@ const envToLogger = {
 
 const app = Fastify({
 	logger: envToLogger[process.env.NODE_ENV]
+});
+
+await app.register(cors, {
+	origin: (origin, cb) => {
+		cb(null, true);
+	},
+	methods: ['GET','POST','PUT','DELETE','PATCH','SEARCH'],
 });
 
 await app.register(FastifyMikroOrmPlugin, config);

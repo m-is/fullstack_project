@@ -163,6 +163,17 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 		}
 	})
 	
+	// A search method to retreive a user's inventory
+	app.search<{Body: { userId: number } }>("/inventory", async (req, reply )=> {
+		const { userId } = req.body;
+		
+		try{
+			const inventory = await req.em.find(Item, {userId})
+			return reply.send(inventory);
+		} catch (err) {
+			return reply.status(500).send({message: err.message});
+		}
+	})
 
 
 	//Add new location to User's world map
@@ -183,6 +194,19 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 			console.error(err);
 			return reply.status(500).send(err);
 			
+		}
+	})
+	
+	
+	// A search method to find the locations that a user has discovered
+	app.search<{Body: { userId: number } }>("/location", async (req, reply )=> {
+		const { userId } = req.body;
+		
+		try{
+			const locations = await req.em.find(Location, {userId})
+			return reply.send(locations);
+		} catch (err) {
+			return reply.status(500).send({message: err.message});
 		}
 	})
 

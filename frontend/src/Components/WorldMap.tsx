@@ -3,7 +3,7 @@
 //If player tries to visit undiscovered location give them a "you are lost" page
 
 
-export const Map = () => {
+export const WorldMap = () => {
 	return (
 		<div>
 			<FarmIcon />
