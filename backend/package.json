@@ -45,6 +45,7 @@
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
     "fastify-plugin": "^4.5.0",
+    "firebase": "^9.22.1",
     "pino-pretty": "^10.0.0"
   },
   "devDependencies": {

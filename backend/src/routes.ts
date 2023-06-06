@@ -1,9 +1,11 @@
+import { create } from "domain";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { Item } from "./db/entities/Item.js";
 import { Location } from "./db/entities/Location.js";
 import bcrypt from "bcrypt";
 import { User } from "./db/entities/User.js";
 import { ICreateUsersBody } from "./types.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 /** This function creates all backend routes for the site
  *
@@ -52,7 +54,61 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	// C
 	app.post<{ Body: ICreateUsersBody }>("/users", async (req, reply) => {
 		const { username, email, password } = req.body;
-
+		
+		const auth = getAuth(app.firebase)
+		
+		const emailstring = email;
+		
+		console.log(`email is ${emailstring}`);
+		console.log(`password is ${password}`);
+		
+		const newUser = await createUserWithEmailAndPassword(auth, "email@gmail.com", "password");
+		
+		console.log(newUser);
+		
+		reply.send(newUser);
+		
+		
+		
+		/*
+			.then((user)=>{
+				console.log(user);
+				//reply.send(user);
+			})
+			.catch((error)=>{
+				console.log(error.message);
+				//reply.status(500).send();
+		})
+		
+		
+		
+		/*
+		auth.createUserWith({
+			uid: 'some-uid',
+			email: 'user@example.com',
+			phoneNumber: '+11234567890',
+		})
+			.then((userRecord) => {
+				// See the UserRecord reference doc for the contents of userRecord.
+				console.log('Successfully created new user:', userRecord.uid);
+				
+			})
+			.catch((error) => {
+				console.log('Error creating new user:', error);
+			});
+		/*
+		createUserWithEmailAndPassword(auth, email, password)
+			.then((userCredential) => {
+				const user = userCredential.user;
+				return reply.send(user);
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				console.log(`Failed to create new user ${errorCode}`, error.message);
+				return reply.status(500).send({ message: error.message });
+			});
+		/*
 		try {
 			
 			const hashedPw = await bcrypt.hash(password, 10);
@@ -79,6 +135,8 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 			console.log("Failed to create new user", err.message);
 			return reply.status(500).send({ message: err.message });
 		}
+	
+		 */
 	});
 
 	//READ
@@ -127,7 +185,30 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	// Login route
 	app.post<{ Body: { email: string; password: string } }>("/login", async (req, reply) => {
 		const { email, password } = req.body;
-
+		
+		const uid = "some-uid";
+		/*
+		const token = await app.firebase.auth().createCustomToken(uid);
+		const login = getAuth(app.firebase);
+		
+		reply.send(token);
+		/*
+		app.firebase.auth()
+			.createCustomToken(uid)
+			.then((customToken) => {
+				// Send token back to client
+				token = customToken;
+				console.log(customToken);
+				console.log("We are here");
+				//reply.send(`The custom token is ${token}`);
+				//return;
+			})
+			.catch((error) => {
+				console.log('Error creating custom token:', error);
+				//reply.status(500).send();
+			});
+		//reply.send(`The custom token is ${token}`);
+		/*
 		try {
 			const theUser = await req.em.findOneOrFail(User, {email}, {strict: true})
 			
@@ -146,6 +227,8 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 			console.error(err);
 			return reply.status(500).send(err);
 		}
+		
+		 */
 	});
 	
 	//Add item to inventory route
