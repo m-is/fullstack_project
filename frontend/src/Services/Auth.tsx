@@ -17,7 +17,7 @@ const firebaseConfig = {
 
 export type AuthContextProps = {
 	token: string | null;
-	userId: number;
+	userEmail: string;
 	handleLogin: (email: string, password: string) => Promise<boolean>;
 	handleLogout: () => void;
 };
@@ -41,19 +41,19 @@ const updateAxios = async (token: string) => {
 };
 
 const initialToken = getTokenFromStorage();
-let initialUserId;
+let initialUserEmail;
 
 if (!(initialToken == null)) {
 	console.log("Updating axios with token: ", initialToken);
 	await updateAxios(initialToken);
-	initialUserId = getUserIdFromToken(initialToken);
+	initialUserEmail = getUserEmailFromToken(initialToken);
 }
 
 export const AuthProvider = ({ children }: any) => {
 	const navigate = useNavigate();
 	
 	const [token, setToken] = useState(initialToken);
-	const [userId, setUserId] = useState(initialUserId);
+	const [userEmail, setUserEmail] = useState(initialUserEmail);
 	
 	const handleLogin = async (email: string, password: string) => {
 		console.log("In handleLogin with ", email, password);
@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }: any) => {
 	const saveToken = (thetoken) => {
 		console.log(thetoken);
 		setToken(thetoken);
-		setUserId(getUserIdFromToken(thetoken));
+		setUserEmail(getUserEmailFromToken(thetoken));
 		localStorage.setItem("token", JSON.stringify(thetoken));
 	};
 	
@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }: any) => {
 		<AuthContext.Provider
 			value={{
 				token,
-				userId,
+				userEmail,
 				handleLogin,
 				handleLogout,
 			}}
@@ -165,7 +165,7 @@ export function getPayloadFromToken(token: string) {
 	return payload;
 }
 
-function getUserIdFromToken(token: string) {
+function getUserEmailFromToken(token: string) {
 	const payload = getPayloadFromToken(token);
-	return payload.userId;
+	return payload.email;
 }

@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import { User } from "./db/entities/User.js";
 import { ICreateUsersBody } from "./types.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import admin from "firebase-admin"
 
 /** This function creates all backend routes for the site
  *
@@ -186,10 +187,16 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	app.post<{ Body: { email: string; password: string } }>("/login", async (req, reply) => {
 		const { email, password } = req.body;
 		
-		const token = await app.firebase.signInWithEmailAndPassword(email,password);
+		const auth = getAuth(app.firebase);
 		
-		reply.send(token);
+		const authEmail = email;
+		const authPass = password;
 		
+		const login = await signInWithEmailAndPassword(auth,authEmail,authPass);
+		
+		const token = await login.user.getIdToken();
+		
+		reply.send({ token});
 		
 		/*
 		let token = null;

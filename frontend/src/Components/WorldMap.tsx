@@ -15,11 +15,12 @@ export const WorldMap = () => {
 	
 	
 	useEffect( () => {
+		console.log(auth);
 		const getLocations = async () => {
 			const locationsRes = await axios({
 				method: 'search',
 				url: 'http://localhost:8080/location',
-				data:{ userId: auth.userId }
+				data:{ userEmail: auth.userEmail }
 				}
 			);
 		
@@ -27,7 +28,7 @@ export const WorldMap = () => {
 		};
 		
 		getLocations().then(setLocations);
-	},[auth.userId]);
+	},[auth.userEmail]);
 	
 	useEffect( () => {
 		if(locations!=undefined){

@@ -1,18 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config();
-import {FastifyInstance, FastifyPluginOptions, FastifyReply, FastifyRequest} from "fastify";
-import Jwt, {VerifyPayloadType} from "@fastify/jwt";
+import {FastifyInstance, FastifyPluginOptions} from "fastify";
 import fp from "fastify-plugin";
-import { credential } from "firebase-admin";
 import { initializeApp } from "firebase/app";
-//import admin from 'firebase-admin/app';
-import { getAuth } from "firebase/auth";
 import admin from "firebase-admin";
-import applicationDefault = credential.applicationDefault;
-
-
-
-
 
 const firebaseConfig = {
 	apiKey: "AIzaSyCozVVwQa4VTZO_z2pVptiJnj1lKRmzLVM",
@@ -46,8 +37,6 @@ declare module 'fastify' {
 		firebaseAuth: any,
 	}
 }
-
-
 
 export const firebasePlugin = fp(async function(app: FastifyInstance, opts: FastifyPluginOptions) {
 	
