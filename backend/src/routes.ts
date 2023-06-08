@@ -186,7 +186,20 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	app.post<{ Body: { email: string; password: string } }>("/login", async (req, reply) => {
 		const { email, password } = req.body;
 		
-		const uid = "some-uid";
+		let token = null;
+		
+		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+			token = req.headers.authorization.split(' ')[1];
+		}
+		
+		if(!token){
+			reply.status(401).send("Authorization failed, no valid token");
+		}
+		else {
+			const decodedToken =app.firebaseAuth.verifyIdToken(token);
+			console.log(decodedToken);
+		}
+		
 		/*
 		const token = await app.firebase.auth().createCustomToken(uid);
 		const login = getAuth(app.firebase);

@@ -103,10 +103,31 @@ function getTokenFromStorage() {
 }
 
 export async function getLoginTokenFromServer(email, password) {
+	/*
+	
+	
+	REPLACE THIS WITH FIREBASE SIGNINWITHEMAILANDPASSWORD
+	
+	
+	
+	
+	
+	
+	 */
 	console.log("In get login token from server with ", email, password);
 	
 	const login_result = await httpClient.post("/login", { email, password });
 	return login_result.data.token;
+	/*
+	
+	
+	
+	REPLACE THIS WITH FIREBASE SIGNINWITHEMAILANDPASSWORD
+	
+	
+	
+	
+	 */
 }
 
 export function getPayloadFromToken(token: string) {

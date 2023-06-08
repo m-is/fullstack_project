@@ -5,7 +5,7 @@ import { AuthPlugin } from "./plugins/auth.js";
 import { FastifySearchHttpMethodPlugin } from "./plugins/http_search.js";
 import { FastifyMikroOrmPlugin } from "./plugins/mikro.js";
 import DoggrRoutes from "./routes.js";
-//import fastifyFirebase from 'fastify-firebase';
+import fastifyFirebase from 'fastify-firebase-auth';
 import { firebasePlugin } from "./plugins/firebase.js";
 
 //import firebase from "'fastify-firebase-auth'";
@@ -25,8 +25,8 @@ const firebaseConfig = {
 const key = {
 	"type": "service_account",
 	"project_id": "zorp-c7155",
-	"private_key_id": "1226bfa7ea648ed3c109c57a27c87bc67d8e31be",
-	"private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCkPQK55yd/EFDa\naFJS8f+IdJpn/fY0Ra7Y45yqLk0zB1gudFLH+dM+V4Ubs+SYjT79Qw6cXxbVkqoA\nHJPmZUZhY9M1VeIkMpmZK2OH+IhvlpuBqnL3+45K3iv7Xmkw6FMSvdRqG7dhpaUO\n60uoyzDv1wnhHS4gYvZsxA66P9VClj9WEfdDav5r2MKhpixVRPop9nNejLpT51tc\ndotI+hPo5xWAzNgJsJUaGuAmUK+upxhAzbGVPKyCRtzZ5DoRTZzAShYaKHUpZqYD\ngUbX4SYmAX6UftXzUCEf+QERKCUddAvAS/rbKgvjAJgTyu6YfteoNAuWk2Qb96/W\nJaq1uDCHAgMBAAECggEALwUCg0uAvLlklGq6auG6aQwM6onEE0oB2TkssHIKCvpm\nzgHiczr8NcRjqL8zSlNhvasVg0Ib7PAMuHR2CUdkQ1yLaqEYWYmc/MN1vscx9FR3\nV8N/H6zGm3uItvHcBrL0mZB8QBaIRS3hl+hYJE5rx7ZWLzsl6gK7Dv+AQeUlfmbE\ngKFy5wtiTGJ3LVawOlh8JsOLWUfXicjEsToljaTG3oL3vIKuPXSlgK9Rw4Q8jeEM\nzq4PZdoVtJt3lsGL7SyJy7w65rk9R0p2SyXDchNZP7HDbEuiuc6Mhrim+kfWj0SY\nL6mXwx/ohJsaEudq+BqHfr/oU73250RXFxrmSksVnQKBgQDgTP9uYGJtZHcjcH/x\nY9mTb/ljAmRlYh61Lvsq4sHZECvGZEKOQeFx3ZdTBG4MZWGIulDVsqdZhlfucF2K\ntkmRubIr+IGjBaptghTAEmNRLA7O70AGNah/8KLtNAd1LCj1HfnWNggI3Oucd+Fm\nGn5RukH5ejxoFG47PZfHZjacAwKBgQC7cwHFtoPmH9CHNwSoXo6QAPaTFLvzh5ti\ne1oPca7hRmuAIPLK9lgnVPr8oOSGzyJH6tDMFhVt2pPfsaCSiu9RYOd+I1B3aW09\nan53pGZ2NbBqGZpEva9m/RGE9/YqzPajVjWicSOgb+ewN7yCSKVyT+Re8jkNyoQ+\nzCSr/MTsLQKBgBrGNitnx/gE6Q/K6wrWf29RC3TdITzU5JN+Iy8wWDFf88m/yA4R\nIScla13WhohmRak7jFCl/cH6/l4Q/amELu39O55yEI90Kq7duzpeN4rF9pKPDpZv\nK0jyYZBtCILdHZp81IjUdEsSi/FmgfpdKTz6PcvY4oMOBUZ/CLIdqmEfAoGACBSA\nCg7BBsVuTrXPbJaO3KQ9/L8TDv9Ucl1Q14OV/z3y2lYRQTB3QlLGcudYknsRRjpX\n/8Qf7llSsHzOqCJ3CHH96JELIeqYe+JAS1X52LSdwyURYk8u5WiZPbsWkGe/ZfEM\nZNEtsPfB6/WrGY6aGyBYfsNANFj7dF2GYyeFMY0CgYA7pX73j4cR7yG0a7b9WB7u\nKvMMoBdNQM8K/wGkKuaQwwg2mf59mFdgVmLQmaGA0qjRvXV9TpHuWzGVg9F9SKlJ\nX8dHgLsfc9++6xedTj7HWMidN+yXwjAVDI7bK/C1bDBlSys1bGRpGNlkuJCXHRaJ\n3eNi0U3kk1TITD4CFBfcWA==\n-----END PRIVATE KEY-----\n",
+	"private_key_id": "d98c5089d11df6e3434e3df7a7041a9fa03ee15e",
+	"private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCy12GMl2rhSxkO\nkhK3Ef3gvKKbaxSKjrboy4Ul2gKlKSQC0msdS0ijwlzc4lxb4Cb4R3ifqOIlOOlF\nE59Q8Hysi0jQ1j16OsHU5xc85JkSB+DybHymAH4PX5VxrsckU1oJZZHO49CDlV/i\nNVI50prTIhENrIQO0Ydro6xuxNz04gXlr0I2aBp5sK/t5qif1uPaDh7ItfvA+S4B\nhGBnYLFfDnDR8EYr0LUR89BGeWZGMWZIx7rAyw45P98P4MFm35Ve3PR4Szw/4Q06\nN1/jdJDNiUAwBZKyuSU+59XZ3wtKC9uGLP8VFywsIF85Km21UrsmtbXDZ9YiDor/\nw4YYkYDTAgMBAAECggEADW1nWQ9rSmQBixsDhbQ3m/59tO6KucZyTDMvmYJvTWgz\n2HRk72ueFhF7OGhUZ9+B/YUcNNyQshu+Q93vybtsmOXSPz++mOU9dVcuYveE2Jo3\n1Ou5RhtmW5AhH8pwEDWj3m2+T0rCdoaqDslTFZ1O24hEwIKR3az0nmvI//4O2uHX\nHi0yrGJ79U6DvnKvSzO2a1BC7iX2qcNqkN6hwQ9hmUbVA5JBqIMvsSdcMP4IyvL1\nCvrVqUJg4AZWOfjg3bhztu4/PPRaxNFKLJTzXyEThZmRuJpmynTHLS/v4N5pkJDE\n3wBbKnwTKANe8MnlLeEt/2Wt3sKBNR454dmB4vbKrQKBgQDuovfLqhHovCNN2lxj\nTCPVkc3Xvh6bCt4F3Laz+RPRRc2j1docASBoTlH65Hz4wyKu2c5tYYivE1NdcaVy\n0R7kRyifwn2tI2766hSVf5q2mW/u/yL7wOaE9mQ6cIhZVaICklMMNsW82VwlJX9j\n37H0OFQ++VpUNML5OI2+poFLhQKBgQC/2p6nZcAT8JD/Egj4dm1ikKM4ens9qMHI\nbL8tcsspyXkUPbRyFJXOrzwaMkqVeD+zWkX7qJBGhK4wzcDKj4t/TwLoxOl8bKR8\ngd4Qpg7wM62NU1Idko6r8G0TbCIMCoH3I+mm+A8eapf0P3vMottXEZFkqTQ+VlDM\nVLQxZoeudwKBgQDJW4OhO0DfU5iqgX0BYGbAN8Yrq8VhZ5sN8T3MwHfjVnX9L15Z\n0O2KdcOg4xk8QlNKnIgdLXZK3BC0wUcsiZ36WrzBiTfIVyS23bs+pixitTeIv4nC\nSfN47/qEgR3b23DXoKYooTLadcHVqj1Chac/fiQ/+uEoOljmN70KyK5CjQKBgFJL\npOKJcusathez1MU/h4xQHrOLVnIMgZNHknocU6mJErbsAQsuaVRPNqjGCdgzzJ9S\nidJ5a+nT4CRvHdPF30Cs08KlNMJ6l9QQoQDjOmUuxbNpmj+1Lh3y89bw+2nO2BD7\nBq7omROjBatvz9rnwM6IaqWTLyXOQLplWyYVpP3hAoGBAJwPtNB3ikqpVjWjszwA\nusvVh7iB2ZFd4oppnWUSuXuBDkUGC3tF0DwmMcTu1KDwGRRdcdeA752WeVONcUMd\nbBXagfqpUSv1/+bdPyGLNK9rlktPJp1sYE9FwJL/t/bqAeVTVGYjB/0vIMzdrAfF\nuj4HLPoxQg68ePc8ptACibZo\n-----END PRIVATE KEY-----\n",
 	"client_email": "firebase-adminsdk-5wd0b@zorp-c7155.iam.gserviceaccount.com",
 	"client_id": "102517931400568005987",
 	"auth_uri": "https://accounts.google.com/o/oauth2/auth",
@@ -79,7 +79,7 @@ await app.register(FastifyMikroOrmPlugin, config);
 await app.register(FastifySearchHttpMethodPlugin);
 await app.register(AuthPlugin);
 await app.register(DoggrRoutes);
-//await app.register(fastifyFirebase, key);
-await app.register(firebasePlugin);
+await app.register(fastifyFirebase, key);
+//await app.register(firebasePlugin);
 
 export default app;
