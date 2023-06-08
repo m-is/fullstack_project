@@ -5,9 +5,14 @@ import Jwt, {VerifyPayloadType} from "@fastify/jwt";
 import fp from "fastify-plugin";
 import { credential } from "firebase-admin";
 import { initializeApp } from "firebase/app";
-import admin from 'firebase-admin/app';
+//import admin from 'firebase-admin/app';
 import { getAuth } from "firebase/auth";
+import admin from "firebase-admin";
 import applicationDefault = credential.applicationDefault;
+
+
+
+
 
 const firebaseConfig = {
 	apiKey: "AIzaSyCozVVwQa4VTZO_z2pVptiJnj1lKRmzLVM",
@@ -33,9 +38,6 @@ const key = {
 	"universe_domain": "googleapis.com"
 }
 
-const serviceAcc = {
-	credential: key
-}
 
 declare module 'fastify' {
 	
@@ -53,7 +55,7 @@ export const firebasePlugin = fp(async function(app: FastifyInstance, opts: Fast
 	app.decorate("firebase", firebase);
 	
 	const firebaseAuth = admin.initializeApp({
-		credential: applicationDefault(),
+		credential: admin.credential.cert("/home/d/workspace/FullstackWeb/fullstack_project/fullstack_project/backend/src/firebasePrivateKey.json")
 	});
 	
 	app.decorate("firebaseAuth", firebaseAuth);

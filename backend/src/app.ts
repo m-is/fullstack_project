@@ -5,7 +5,7 @@ import { AuthPlugin } from "./plugins/auth.js";
 import { FastifySearchHttpMethodPlugin } from "./plugins/http_search.js";
 import { FastifyMikroOrmPlugin } from "./plugins/mikro.js";
 import DoggrRoutes from "./routes.js";
-import fastifyFirebase from 'fastify-firebase-auth';
+//import fastifyFirebase from 'fastify-firebase-auth';
 import { firebasePlugin } from "./plugins/firebase.js";
 
 //import firebase from "'fastify-firebase-auth'";
@@ -79,7 +79,7 @@ await app.register(FastifyMikroOrmPlugin, config);
 await app.register(FastifySearchHttpMethodPlugin);
 await app.register(AuthPlugin);
 await app.register(DoggrRoutes);
-await app.register(fastifyFirebase, key);
+//await app.register(fastifyFirebase, key);
 //await app.register(firebasePlugin);
 
 export default app;

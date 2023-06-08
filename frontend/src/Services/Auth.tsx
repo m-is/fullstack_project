@@ -4,6 +4,17 @@ import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext<AuthContextProps | null>(null);
 
+const firebaseConfig = {
+	apiKey: "AIzaSyCozVVwQa4VTZO_z2pVptiJnj1lKRmzLVM",
+	authDomain: "zorp-c7155.firebaseapp.com",
+	projectId: "zorp-c7155",
+	storageBucket: "zorp-c7155.appspot.com",
+	messagingSenderId: "447122475646",
+	appId: "1:447122475646:web:554c21ec7bcd71dc53262f",
+	measurementId: "G-TJJ62R37J7"
+};
+
+
 export type AuthContextProps = {
 	token: string | null;
 	userId: number;
@@ -115,6 +126,8 @@ export async function getLoginTokenFromServer(email, password) {
 	
 	 */
 	console.log("In get login token from server with ", email, password);
+	
+	
 	
 	const login_result = await httpClient.post("/login", { email, password });
 	return login_result.data.token;

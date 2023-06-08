@@ -186,6 +186,12 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	app.post<{ Body: { email: string; password: string } }>("/login", async (req, reply) => {
 		const { email, password } = req.body;
 		
+		const token = await app.firebase.signInWithEmailAndPassword(email,password);
+		
+		reply.send(token);
+		
+		
+		/*
 		let token = null;
 		
 		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
