@@ -6,15 +6,18 @@
 import { useAuth } from "@/Services/Auth.tsx";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import farmIcon from "../assets/images/farm_icon.jpg";
+
 
 export const WorldMap = () => {
+	const navigate = useNavigate();
 	const auth = useAuth();
-	
 	const[locations,setLocations] = useState();
 	const[map, setMap] = useState([]);
 	
-	
 	useEffect( () => {
+		
 		console.log(auth);
 		const getLocations = async () => {
 			const locationsRes = await axios({
@@ -28,6 +31,7 @@ export const WorldMap = () => {
 		};
 		
 		getLocations().then(setLocations);
+		
 	},[auth.userEmail]);
 	
 	useEffect( () => {
@@ -41,9 +45,14 @@ export const WorldMap = () => {
 		setMap(map);
 	},[locations]);
 	
+	const navigateToFarm = () =>{
+		const path = "/farm";
+		navigate(path);
+	};
 	
 	
 	
+	/*
 	return (
 		<div>
 			{ map.includes("farm") ? (
@@ -57,14 +66,17 @@ export const WorldMap = () => {
 			) : null }
 		</div>
 	);
+	
+	 */
+	return (
+		<div>
+			<button><img className={"mapIcon"} src={farmIcon} alt={"Icon for farm location"} onClick={navigateToFarm} /></button>
+				<CastleGateIcon />
+				<TownCenterIcon />
+		</div>
+	);
 };
 
-export function FarmIcon(){
-	return(
-		//add onClick event to link to farm page/component
-		<img src={""} alt={"Icon for farm location"} />
-	);
-}
 
 export function CastleGateIcon() {
 	return(
