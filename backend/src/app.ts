@@ -47,7 +47,7 @@ await app.register(cors, {
 });
 
 
-//await app.register(FastifyMikroOrmPlugin, config);
+await app.register(FastifyMikroOrmPlugin, config);
 await app.register(FastifySearchHttpMethodPlugin);
 //await app.register(AuthPlugin);
 await app.register(DoggrRoutes);

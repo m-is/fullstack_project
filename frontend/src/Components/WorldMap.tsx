@@ -7,7 +7,9 @@ import { useAuth } from "@/Services/Auth.tsx";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import farmIcon from "../assets/images/farm_icon.jpg";
+import farmIcon from "../assets/images/farm_icon.png";
+import gatesIcon from "../assets/images/gates_icon.png";
+import worldMap from "../assets/images/world_map.png";
 
 
 export const WorldMap = () => {
@@ -50,6 +52,11 @@ export const WorldMap = () => {
 		navigate(path);
 	};
 	
+	const navigateToGates = () =>{
+		const path = "/gates";
+		navigate(path);
+	};
+	
 	
 	
 	/*
@@ -69,21 +76,14 @@ export const WorldMap = () => {
 	
 	 */
 	return (
-		<div>
-			<button><img className={"mapIcon"} src={farmIcon} alt={"Icon for farm location"} onClick={navigateToFarm} /></button>
-				<CastleGateIcon />
-				<TownCenterIcon />
+		<div className={"world-map"}>
+			<button id={"farm-icon"}><img  className={"map-icon"} src={farmIcon} alt={"Icon for farm location"} onClick={navigateToFarm} /></button>
+			<button id={"gates-icon"}><img className={"map-icon"} src={gatesIcon} alt={"Icon for town gates location"} onClick={navigateToGates} /></button>
 		</div>
 	);
 };
 
 
-export function CastleGateIcon() {
-	return(
-		//add onClick event to link to castle gate page/component
-		<img src={""} alt={"Icon for castle gate location"}/>
-	);
-}
 
 export function TownCenterIcon() {
 	return(
