@@ -14,21 +14,21 @@ export function ZorpRouter() {
 	const auth = useAuth();
 	
 	return (
-		<div className={"doggrfancy"}>
-			<nav className="bg-blue-800 rounded-b shadow-lg mb-4">
-				<div className="navbar justify-center">
-					<div className={"navbar-center lg:flex"}>
-						<ul className={"menu menu-horizontal"}>
-							<li><Link to="/">Home</Link></li>
+		<div className={"landing"} >
+			<nav>
+				<div>
+					<div>
+						<ul className={"navbar"}>
+							<li className={"nav-item"}><Link className={"link"} to="/">Home</Link></li>
 							{auth?.token != null ? (
 								<>
-									<li><Link to ="/map">World Map</Link></li>
-									<li><Link to ="/logout">Log-out</Link></li>
+									<li className={"nav-item"}><Link className={"link"} to ="/map">World Map</Link></li>
+									<li className={"nav-item"}><Link className={"link"} to ="/logout">Log-out</Link></li>
 								</>
 							) : (
 								<>
-									<li><Link to="/login"> Login</Link></li>
-									<li><Link to="/signup"> Sign-Up</Link></li>
+									<li className={"nav-item"}><Link className={"link"} to="/login"> Login</Link></li>
+									<li className={"nav-item"}><Link className={"link"} to="/signup"> Sign-Up</Link></li>
 								</>
 							)}
 						</ul>

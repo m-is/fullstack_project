@@ -9,9 +9,29 @@ export const Home = () => {
 
 export function Title() {
 	//Change to better splash title, possibly image
-	return <h1>ZORP</h1>;
+	
+	const title = String.raw`
+╭━━━━┳━━━┳━━━┳━━━╮
+╰━━╮━┃╭━╮┃╭━╮┃╭━╮┃
+╱╱╭╯╭┫┃╱┃┃╰━╯┃╰━╯┃
+╱╭╯╭╯┃┃╱┃┃╭╮╭┫╭━━╯
+╭╯━╰━┫╰━╯┃┃┃╰┫┃
+╰━━━━┻━━━┻╯╰━┻╯`;
+	return (
+		<div>
+			<h1><pre> {title} </pre></h1>
+		</div>
+	);
+	
 }
 
 export function Description() {
-	return <p>There will be a description of the game and a brief introduction here</p>;
+	return (
+		<div>
+			<h2>WELCOME TO ZORP</h2>
+			<p>ZORP is an online point and click adventure game set in a fantasy world</p>
+			<p>To play sign up for an account by clicking the "SIGN-UP" button above</p>
+		</div>
+	);
+	
 }
