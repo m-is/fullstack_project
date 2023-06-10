@@ -56,9 +56,11 @@ export const Farm = () => {
 	
 	//Grab Shovel should have onClick=OnShovelClick, but backend isn't working
 	return(
-		<div id={"farm-interactions"}>
-			<button >Grab Shovel</button>
-			<button onClick={navigateToMap}>Leave</button>
+		<div className={"farm-page background"}>
+			<button className={"look-around"} >Look Around</button>
+			<button id={"grab-shovel"} >Grab Shovel</button>
+			<button id={"look-at-sign"} >Look At Sign</button>
+			<button className={"leave-button"} onClick={navigateToMap}>Leave</button>
 		</div>
 	);
 	

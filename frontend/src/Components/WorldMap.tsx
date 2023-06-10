@@ -77,7 +77,7 @@ export const WorldMap = () => {
 	
 	 */
 	return (
-		<div className={"world-map"}>
+		<div className={"world-map background"}>
 			{ map.includes("farm") ? (
 				<button id={"farm-icon"}><img  className={"map-icon"} src={farmIcon} alt={"Icon for farm location"} onClick={navigateToFarm} /></button>
 			) : null }

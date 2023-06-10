@@ -10,19 +10,47 @@
     -webkit-text-size-adjust: 100%;
 }
 
+button {
+    background: black;
+    color: white;
+    border-width: thick;
+    height: 100%;
+    width: 100%;
+    display: block;
+    border-style: solid;
+    border-color: white;
+    text-align: center;
+}
+
+button:hover {
+    background: rgba(255,255,255,100%);
+    color: rgba(255,255,255,100%);
+}
+
 /*
 World map styling
  */
-.world-map{
-    margin-left: auto;
-    margin-right: auto;
-    width: 1000px;
-    height: 1000px;
-    background-image: url("src/assets/images/world_map.png");
+.background{
     background-repeat: no-repeat;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(11, 1fr);
+    margin-left: auto;
+    margin-right: auto;
+    width: 1000px;
+    height: 1000px;
+}
+
+.world-map{
+    background-image: url("src/assets/images/world_map.png");
+}
+
+.farm-page{
+    background-image: url("src/assets/images/farm_background.png");
+}
+
+.gates-page{
+    background-image: url("src/assets/images/gates_background.png");
 }
 
 #farm-icon{
@@ -98,4 +126,33 @@ Styling for location interactions
     text-align: center;
 }
 
+/*
+Farm page styling
+ */
+.look-around{
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 4;
+}
 
+.leave-button{
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 8;
+    grid-column-end: 10;
+}
+
+#look-at-sign{
+    grid-row-start: 10;
+    grid-row-end: 11;
+    grid-column-start: 2;
+    grid-column-end: 4;
+}
+
+#grab-shovel{
+    grid-row-start: 9;
+    grid-row-end: 10;
+    grid-column-start: 7;
+    grid-column-end: 9;
+}
