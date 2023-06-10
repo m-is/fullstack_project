@@ -14,6 +14,10 @@
 World map styling
  */
 .world-map{
+    margin-left: auto;
+    margin-right: auto;
+    width: 1000px;
+    height: 1000px;
     background-image: url("src/assets/images/world_map.png");
     background-repeat: no-repeat;
     display: grid;
@@ -31,8 +35,8 @@ World map styling
 #gates-icon{
     grid-row-start: 5;
     grid-row-end: 6;
-    grid-column-start: 10;
-    grid-column-end: 11;
+    grid-column-start: 9;
+    grid-column-end: 10;
 }
 
 .map-icon{
@@ -80,6 +84,18 @@ Navbar styling
 .link:hover {
     background-color: rgba(255,255,255,100);
     color: white;
+}
+
+/*
+Styling for location interactions
+ */
+.interaction {
+    height: 100%;
+    width: 100%;
+    display: block;
+    border-width: thick;
+    border-style: solid;
+    text-align: center;
 }
 
 

@@ -125,9 +125,10 @@
         {
           "keyName": "location_pkey",
           "columnNames": [
-            "user_id"
+            "user_id",
+            "name"
           ],
-          "composite": false,
+          "composite": true,
           "primary": true,
           "unique": true
         }
@@ -144,7 +145,6 @@
             "id"
           ],
           "referencedTableName": "public.users",
-          "deleteRule": "cascade",
           "updateRule": "cascade"
         }
       }

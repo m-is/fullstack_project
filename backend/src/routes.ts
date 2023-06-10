@@ -1,4 +1,3 @@
-import { create } from "domain";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { Item } from "./db/entities/Item.js";
 import { Location } from "./db/entities/Location.js";
@@ -58,58 +57,13 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 		
 		const auth = getAuth(app.firebase)
 		
-		const emailstring = email;
-		
-		console.log(`email is ${emailstring}`);
+		console.log(`email is ${email}`);
 		console.log(`password is ${password}`);
 		
-		const newUser = await createUserWithEmailAndPassword(auth, "email@gmail.com", "password");
+		const newFirebaseUser = await createUserWithEmailAndPassword(auth, email, password);
 		
-		console.log(newUser);
+		console.log(newFirebaseUser);
 		
-		reply.send(newUser);
-		
-		
-		
-		/*
-			.then((user)=>{
-				console.log(user);
-				//reply.send(user);
-			})
-			.catch((error)=>{
-				console.log(error.message);
-				//reply.status(500).send();
-		})
-		
-		
-		
-		/*
-		auth.createUserWith({
-			uid: 'some-uid',
-			email: 'user@example.com',
-			phoneNumber: '+11234567890',
-		})
-			.then((userRecord) => {
-				// See the UserRecord reference doc for the contents of userRecord.
-				console.log('Successfully created new user:', userRecord.uid);
-				
-			})
-			.catch((error) => {
-				console.log('Error creating new user:', error);
-			});
-		/*
-		createUserWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				const user = userCredential.user;
-				return reply.send(user);
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.log(`Failed to create new user ${errorCode}`, error.message);
-				return reply.status(500).send({ message: error.message });
-			});
-		/*
 		try {
 			
 			const hashedPw = await bcrypt.hash(password, 10);
@@ -130,14 +84,13 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 			
 			await req.em.flush();
 			
-			console.log("Created new user:", newUser);
+			console.log(`Created new user: ${newUser.username} with location: ${newLocation.name}` );
 			return reply.send(newUser);
 		} catch (err) {
 			console.log("Failed to create new user", err.message);
 			return reply.status(500).send({ message: err.message });
 		}
-	
-		 */
+		
 	});
 
 	//READ
@@ -198,42 +151,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 		
 		reply.send({ token});
 		
-		/*
-		let token = null;
 		
-		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-			token = req.headers.authorization.split(' ')[1];
-		}
-		
-		if(!token){
-			reply.status(401).send("Authorization failed, no valid token");
-		}
-		else {
-			const decodedToken =app.firebaseAuth.verifyIdToken(token);
-			console.log(decodedToken);
-		}
-		
-		/*
-		const token = await app.firebase.auth().createCustomToken(uid);
-		const login = getAuth(app.firebase);
-		
-		reply.send(token);
-		/*
-		app.firebase.auth()
-			.createCustomToken(uid)
-			.then((customToken) => {
-				// Send token back to client
-				token = customToken;
-				console.log(customToken);
-				console.log("We are here");
-				//reply.send(`The custom token is ${token}`);
-				//return;
-			})
-			.catch((error) => {
-				console.log('Error creating custom token:', error);
-				//reply.status(500).send();
-			});
-		//reply.send(`The custom token is ${token}`);
 		/*
 		try {
 			const theUser = await req.em.findOneOrFail(User, {email}, {strict: true})
@@ -270,7 +188,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 				});
 				
 				
-				await req.em.flush;
+				await req.em.flush();
 				return reply.send(`${newItem.name} added to ${email} user inventory`);
 			
 		 
@@ -281,11 +199,12 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	})
 	
 	// A search method to retreive a user's inventory
-	app.search<{Body: { userId: number } }>("/inventory", async (req, reply )=> {
-		const { userId } = req.body;
+	app.search<{Body: { userEmail: string } }>("/inventory", async (req, reply )=> {
+		const { userEmail } = req.body;
 		
 		try{
-			const inventory = await req.em.find(Item, {userId})
+			const theUser = await req.em.find(User, {email: userEmail})
+			const inventory = await req.em.find(Item, User)
 			return reply.send(inventory);
 		} catch (err) {
 			return reply.status(500).send({message: err.message});
@@ -305,7 +224,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 				visited: false
 			})
 			
-			await req.em.flush;
+			await req.em.flush();
 			return reply.send(`${newLocation.name} added to ${email} user map`);
 		} catch(err){
 			console.error(err);
@@ -316,11 +235,12 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	
 	
 	// A search method to find the locations that a user has discovered
-	app.search<{Body: { userId: number } }>("/location", async (req, reply )=> {
-		const { userId } = req.body;
+	app.search<{Body: { userEmail: string } }>("/location", async (req, reply )=> {
+		const { userEmail } = req.body;
 		
 		try{
-			const locations = await req.em.find(Location, {user_id: userId})
+			const theUser = await req.em.findOneOrFail(User, {email: userEmail})
+			const locations = await req.em.find(Location, {user_id: theUser.id})
 			return reply.send(locations);
 		} catch (err) {
 			return reply.status(500).send({message: err.message});
@@ -338,7 +258,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 			
 			toVisit.visited = true;
 			
-			await req.em.flush;
+			await req.em.flush();
 			return reply.send(`${location} has been visited on ${email} user map`);
 		}
 		catch(err) {

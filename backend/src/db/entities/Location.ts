@@ -1,4 +1,4 @@
-import { Entity, Property, ManyToOne } from "@mikro-orm/core";
+import { Entity, Property, ManyToOne, PrimaryKey, PrimaryKeyType } from "@mikro-orm/core";
 import type { Rel } from "@mikro-orm/core"
 import { User } from "./User.js"
 
@@ -34,9 +34,11 @@ export class Location {
 	@ManyToOne({primary:true})
 	user!: Rel<User>;
 	
-	@Property()
+	@PrimaryKey()
 	name!: string;
 	
 	@Property()
 	visited: boolean = false;
+	
+	[PrimaryKeyType]?: [number, string];
 }

@@ -45,7 +45,8 @@ export const WorldMap = () => {
 			});
 		}
 		setMap(map);
-	},[locations]);
+		console.log(map);
+	},[locations, map]);
 	
 	const navigateToFarm = () =>{
 		const path = "/farm";
@@ -77,8 +78,13 @@ export const WorldMap = () => {
 	 */
 	return (
 		<div className={"world-map"}>
-			<button id={"farm-icon"}><img  className={"map-icon"} src={farmIcon} alt={"Icon for farm location"} onClick={navigateToFarm} /></button>
-			<button id={"gates-icon"}><img className={"map-icon"} src={gatesIcon} alt={"Icon for town gates location"} onClick={navigateToGates} /></button>
+			{ map.includes("farm") ? (
+				<button id={"farm-icon"}><img  className={"map-icon"} src={farmIcon} alt={"Icon for farm location"} onClick={navigateToFarm} /></button>
+			) : null }
+			{ map.includes("gates") ? (
+				<button id={"gates-icon"}><img className={"map-icon"} src={gatesIcon} alt={"Icon for town gates location"} onClick={navigateToGates} /></button>
+			) : null }
+			
 		</div>
 	);
 };

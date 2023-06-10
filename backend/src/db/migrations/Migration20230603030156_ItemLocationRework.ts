@@ -7,7 +7,7 @@ export class Migration20230603030156 extends Migration {
 
     this.addSql('alter table "users" drop constraint "users_map_user_foreign";');
 
-    this.addSql('create table "location" ("user_id" int not null, "name" varchar(255) not null, "visited" boolean not null default false, constraint "location_pkey" primary key ("user_id"));');
+    this.addSql('create table "location" ("user_id" int not null, "name" varchar(255) not null, "visited" boolean not null default false, constraint "location_pkey" primary key ("user_id","name"));');
 
     this.addSql('create table "item" ("user_id" int not null, "name" varchar(255) not null, constraint "item_pkey" primary key ("user_id", "name"));');
 
