@@ -2,6 +2,7 @@
 //Boot player from here if no auth
 //If player tries to visit undiscovered location give them a "you are lost" page
 
+import { Dialogue } from "@/Components/DialogueBox.tsx";
 import { useAuth } from "@/Services/Auth.tsx";
 import { playerInfo } from "@/Services/RecoilState.tsx";
 import axios from "axios";
@@ -33,12 +34,11 @@ export const WorldMap = () => {
 				}
 			);
 			
-			
 			return locationsRes.data;
 		};
-		
 		getLocations().then(setLocationList);
-		},[auth.userEmail]);
+		
+		}, [auth.userEmail]);
 	
 	useEffect( () => {
 		
@@ -67,18 +67,21 @@ export const WorldMap = () => {
 		console.log(player);
 	},[auth.userEmail,locationList,inventoryList]);
 	
+	useEffect(  () => {
+		const map= [];
+		
+		locationList.forEach((location) => {
+			const value = Object.values(location);
+			map.push(value[1]);
+		});
+		
+		setMap(map);
+	},[locationList]);
+	
+	
 	
 	const navigateToFarm = () =>{
 		const path = "/farm";
-		/*
-		let visited = false;
-		locations.forEach((location) =>{
-			if(location.name === "farm"){
-				visited = location.visited;
-			}
-		});
-		
-		 */
 		navigate(path);
 	};
 	
@@ -88,26 +91,10 @@ export const WorldMap = () => {
 	};
 	
 	
-	
-	/*
-	return (
-		<div>
-			{ map.includes("farm") ? (
-				<FarmIcon />
-			) : null }
-			{ map.includes("castleGate") ? (
-				<CastleGateIcon />
-			) : null }
-			{ map.includes("townCenter") ? (
-				<TownCenterIcon />
-			) : null }
-		</div>
-	);
-	
-	 */
 	return (
 		
 		<div className={"world-map background"}>
+			<Dialogue text="WELCOME TO ZORP"></Dialogue>
 				<button id={"farm-icon"}><img  className={"map-icon"} src={farmIcon} alt={"Icon for farm location"} onClick={navigateToFarm} /></button>
 			{ map.includes("gates") ? (
 				<button id={"gates-icon"}><img className={"map-icon"} src={gatesIcon} alt={"Icon for town gates location"} onClick={navigateToGates} /></button>
