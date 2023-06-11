@@ -1,4 +1,5 @@
 import { Farm } from "@/Components/Farm.tsx";
+import { Gates } from "@/Components/Gates.tsx";
 import { Home } from "@/Components/Home.tsx";
 import { Login } from "@/Components/Login.tsx";
 import { Logout } from "@/Components/Logout.tsx";
@@ -44,6 +45,7 @@ export function ZorpRouter() {
 				<Route path="/map" element={<ProtectedRoute><WorldMap /></ProtectedRoute>}/>
 				<Route path="/logout" element={<Logout />}></Route>
 				<Route path="/farm" element={<ProtectedRoute><Farm /></ProtectedRoute>}/>
+				<Route path="/gates" element={<ProtectedRoute><Gates /></ProtectedRoute>}/>
 			</Routes>
 		</div>
 	);
