@@ -189,7 +189,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 				
 				
 				await req.em.flush();
-				return reply.send(`${newItem.name} added to ${email} user inventory`);
+				return reply.send(newItem);
 			
 		 
 		} catch (err) {
@@ -225,7 +225,7 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 			})
 			
 			await req.em.flush();
-			return reply.send(`${newLocation.name} added to ${email} user map`);
+			return reply.send(newLocation);
 		} catch(err){
 			console.error(err);
 			return reply.status(500).send(err);
