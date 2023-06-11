@@ -6,7 +6,7 @@
 import { useAuth } from "@/Services/Auth.tsx";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import farmIcon from "../assets/images/farm_icon.png";
 import gatesIcon from "../assets/images/gates_icon.png";
 import worldMap from "../assets/images/world_map.png";
@@ -14,8 +14,9 @@ import worldMap from "../assets/images/world_map.png";
 
 export const WorldMap = () => {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const auth = useAuth();
-	const[locations,setLocations] = useState();
+	const[locations,setLocations] = useState([]);
 	const[map, setMap] = useState([]);
 	
 	useEffect( () => {
@@ -50,7 +51,13 @@ export const WorldMap = () => {
 	
 	const navigateToFarm = () =>{
 		const path = "/farm";
-		navigate(path);
+		let visited = false;
+		locations.forEach((location) =>{
+			if(location.name === "farm"){
+				visited = location.visited;
+			}
+		});
+		navigate(path, {state: {visited}});
 	};
 	
 	const navigateToGates = () =>{

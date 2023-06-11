@@ -2,10 +2,12 @@ import { useAuth } from "@/Services/Auth.tsx";
 import { httpClient } from "@/Services/HttpClient.tsx";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const Farm = () => {
 	const navigate = useNavigate();
+	const passed = useLocation();
+	const [{ visited }, setVisited] = useState(passed.state);
 	const auth = useAuth();
 	const [inventory, setInventory] = useState();
 	const [items, setItems] = useState([]);
@@ -49,17 +51,34 @@ export const Farm = () => {
 			});
 	};
 	
+	const onLookAround = () => {
+		httpClient.put("/location",{location:"farm",email:auth.userEmail})
+			.then( (response) =>{
+				console.log(response.status);
+			})
+			.catch(err => {
+				console.error(err);
+			});
+		setVisited(true);
+	};
+	
 	const navigateToMap = () => {
 		const path = "/map";
 		navigate(path);
 	};
 	
+	
+	
 	//Grab Shovel should have onClick=OnShovelClick, but backend isn't working
 	return(
 		<div className={"farm-page background"}>
-			<button className={"look-around"} >Look Around</button>
-			<button id={"grab-shovel"} >Grab Shovel</button>
-			<button id={"look-at-sign"} >Look At Sign</button>
+			<button className={"look-around"} onClick={onLookAround} >Look Around</button>
+			{ visited ? (
+				<button id={"grab-shovel"} >Grab Shovel</button>
+				) : null}
+			{ visited ? (
+				<button id={"look-at-sign"} >Look At Sign</button>
+			) : null}
 			<button className={"leave-button"} onClick={navigateToMap}>Leave</button>
 		</div>
 	);
