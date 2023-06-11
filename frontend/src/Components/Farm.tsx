@@ -1,3 +1,4 @@
+import { Dialogue } from "@/Components/DialogueBox.tsx";
 import { useAuth } from "@/Services/Auth.tsx";
 import { httpClient } from "@/Services/HttpClient.tsx";
 import { playerInfo } from "@/Services/RecoilState.tsx";
@@ -12,7 +13,17 @@ export const Farm = () => {
 	const [items, setItems] = useState([]);
 	const [visited, setVisited ] = useState(false);
 	const [player, setPlayer] = useRecoilState(playerInfo);
-	
+	const [dialogue_around, setDialogueAround ] = useState(false);
+	const [dialogue_sign, setDialogueSign ] = useState(false);
+	const [dialogue_shovel, setDialogueShovel ] = useState(false);
+	const lookAroundDescription =
+		"Standing near the road, you look around to see a barn and field in the distance. " +
+		"There's a small road-sign shortly down the road and you notice a shovel propped up against a tree close-by.";
+	const shovelDescription =
+		"You grab the medium sized shovel and strap it to the side of your rucksack";
+	const signDescription= "You walk down the road to the sign and read it. " +
+		"You discover the name of this farm is Moon Harvest Homestead and that there is a town called Rensworth to the north." +
+		"The sign details a third location, but the text is too worn to read.";
 	
 	useEffect( () => {
 		const items = [];
@@ -57,6 +68,7 @@ export const Farm = () => {
 		};
 		setValues(newPlayer);
 		
+		setDialogueShovel(true);
 		setItems(items);
 	};
 	
@@ -69,7 +81,7 @@ export const Farm = () => {
 				console.error(err);
 			});
 		
-		
+		setDialogueAround(true);
 		setVisited(true);
 	};
 	
@@ -82,6 +94,7 @@ export const Farm = () => {
 				console.error(err);
 			});
 		
+		setDialogueSign(true);
 	};
 	
 	const navigateToMap = () => {
@@ -95,6 +108,9 @@ export const Farm = () => {
 	return(
 		<div className={"farm-page background"}>
 			<button className={"look-around"} onClick={onLookAround} >Look Around</button>
+			{ dialogue_around && <Dialogue text={`${lookAroundDescription}`}/>}
+			{ dialogue_sign && <Dialogue text={`${signDescription}`}/>}
+			{ dialogue_shovel && <Dialogue text={`${shovelDescription}`}/>}
 			{ visited ? (
 				<>
 					{items.includes("shovel") ? null :

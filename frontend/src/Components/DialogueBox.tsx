@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
+
+//takes text as an argument as well as a boolean to decide whether it should be visible on render or not
 export const Dialogue = (text) => {
 	const [showDialogue, setShowDialogue] = useState(true);
 	const onClick = () => setShowDialogue(false);

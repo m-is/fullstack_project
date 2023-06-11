@@ -125,8 +125,8 @@ Styling for location interactions
     justify-content: center;
     grid-row-start: 5;
     grid-row-end: 6;
-    grid-column-start: 6;
-    grid-column-end: 8;
+    grid-column-start: 4;
+    grid-column-end: 9;
     border-style: solid;
     border-width: thick;
     border-color: white;
