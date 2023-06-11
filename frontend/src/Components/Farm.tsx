@@ -1,16 +1,17 @@
 import { useAuth } from "@/Services/Auth.tsx";
 import { httpClient } from "@/Services/HttpClient.tsx";
+import { playerInfo } from "@/Services/RecoilState.tsx";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 export const Farm = () => {
 	const navigate = useNavigate();
-	const passed = useLocation();
-	const [{ visited }, setVisited] = useState(passed.state);
 	const auth = useAuth();
-	const [inventory, setInventory] = useState();
+	const [inventory, setInventory] = useState([]);
 	const [items, setItems] = useState([]);
+	const [player, setPlayer] = useRecoilState(playerInfo);
 	
 	useEffect( () => {
 		
@@ -25,7 +26,7 @@ export const Farm = () => {
 			
 			return inventoryRes.data;
 		};
-		
+		console.log(player);
 		getInventory().then(setInventory);
 		
 	},[auth.userEmail]);
@@ -41,6 +42,17 @@ export const Farm = () => {
 		setItems(items);
 	},[inventory]);
 	
+	useEffect( () => {
+		const items = [];
+		if (player.inventory) {
+		player.inventory.forEach((item) => {
+			const values = Object.values(item);
+			items.push(values[1]);
+		});
+		}
+		setItems(items);
+	}, [player]);
+	
 	const onShovelClick = () => {
 		httpClient.post("/inventory",{email:auth.userEmail, item:"shovel"})
 			.then( (response) =>{
@@ -49,6 +61,11 @@ export const Farm = () => {
 			.catch(err =>{
 				console.error(err);
 			});
+		if(!items.includes("shovel")){
+			items.push("shovel");
+		}
+		setItems(items);
+		
 	};
 	
 	const onLookAround = () => {
@@ -59,7 +76,17 @@ export const Farm = () => {
 			.catch(err => {
 				console.error(err);
 			});
-		setVisited(true);
+	};
+	
+	const onLookAtSign = () => {
+		httpClient.post("location", {location:"gates", email:auth.userEmail})
+			.then( (response) =>{
+				console.log(response.status);
+			})
+			.catch(err => {
+				console.error(err);
+			});
+		
 	};
 	
 	const navigateToMap = () => {
@@ -73,12 +100,10 @@ export const Farm = () => {
 	return(
 		<div className={"farm-page background"}>
 			<button className={"look-around"} onClick={onLookAround} >Look Around</button>
-			{ visited ? (
-				<button id={"grab-shovel"} >Grab Shovel</button>
-				) : null}
-			{ visited ? (
-				<button id={"look-at-sign"} >Look At Sign</button>
-			) : null}
+			{items.includes("shovel") ? null :
+				<button id={"grab-shovel"} onClick={onShovelClick}>Grab Shovel</button>
+			}
+				<button id={"look-at-sign"} onClick={onLookAtSign}>Look At Sign</button>
 			<button className={"leave-button"} onClick={navigateToMap}>Leave</button>
 		</div>
 	);

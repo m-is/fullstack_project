@@ -2,11 +2,12 @@
 //Boot player from here if no auth
 //If player tries to visit undiscovered location give them a "you are lost" page
 
-
 import { useAuth } from "@/Services/Auth.tsx";
+import { playerInfo } from "@/Services/RecoilState.tsx";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import farmIcon from "../assets/images/farm_icon.png";
 import gatesIcon from "../assets/images/gates_icon.png";
 import worldMap from "../assets/images/world_map.png";
@@ -14,14 +15,16 @@ import worldMap from "../assets/images/world_map.png";
 
 export const WorldMap = () => {
 	const navigate = useNavigate();
-	const location = useLocation();
+	const [player, setPlayer ] = useRecoilState(playerInfo);
+	const [locationList, setLocationList] = useState([]);
+	const [inventoryList, setInventoryList] = useState([]);
+	
 	const auth = useAuth();
-	const[locations,setLocations] = useState([]);
+	
 	const[map, setMap] = useState([]);
 	
 	useEffect( () => {
 		
-		console.log(auth);
 		const getLocations = async () => {
 			const locationsRes = await axios({
 				method: 'search',
@@ -29,35 +32,54 @@ export const WorldMap = () => {
 				data:{ userEmail: auth.userEmail }
 				}
 			);
-		
+			
+			
 			return locationsRes.data;
 		};
 		
-		getLocations().then(setLocations);
+		getLocations().then(setLocationList);
+		},[auth.userEmail]);
+	
+	useEffect( () => {
 		
+		const getInventory = async () => {
+			const inventoryRes = await axios({
+				method: 'search',
+				url: 'http://localhost:8080/inventory',
+				data: { userEmail: auth.userEmail }
+			});
+			
+			return inventoryRes.data;
+		};
+		
+		getInventory().then(setInventoryList);
 	},[auth.userEmail]);
 	
 	useEffect( () => {
-		if(locations!=undefined){
-			// @ts-ignore
-			locations.forEach((location) =>{
-				const values = Object.values(location);
-				map.push(values[1]);
-			});
-		}
-		setMap(map);
-		console.log(map);
-	},[locations, map]);
+		const setValues= (newPlayer) => setPlayer( (player) => player = newPlayer);
+		const newPlayer = {
+			email: auth.userEmail,
+			locations: locationList,
+			inventory: inventoryList,
+		};
+		setValues(newPlayer);
+		
+		console.log(player);
+	},[auth.userEmail,locationList,inventoryList]);
+	
 	
 	const navigateToFarm = () =>{
 		const path = "/farm";
+		/*
 		let visited = false;
 		locations.forEach((location) =>{
 			if(location.name === "farm"){
 				visited = location.visited;
 			}
 		});
-		navigate(path, {state: {visited}});
+		
+		 */
+		navigate(path);
 	};
 	
 	const navigateToGates = () =>{
@@ -84,10 +106,9 @@ export const WorldMap = () => {
 	
 	 */
 	return (
+		
 		<div className={"world-map background"}>
-			{ map.includes("farm") ? (
 				<button id={"farm-icon"}><img  className={"map-icon"} src={farmIcon} alt={"Icon for farm location"} onClick={navigateToFarm} /></button>
-			) : null }
 			{ map.includes("gates") ? (
 				<button id={"gates-icon"}><img className={"map-icon"} src={gatesIcon} alt={"Icon for town gates location"} onClick={navigateToGates} /></button>
 			) : null }
