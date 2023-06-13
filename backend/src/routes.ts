@@ -178,6 +178,23 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	//Add item to inventory route
 	app.post<{Body: { item: string, email: string } }>("/inventory", async (req, reply) =>{
 		const { item, email } = req.body;
+		let token = null;
+		
+		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+			token = req.headers.authorization.split(' ')[1];
+			token = token.slice(1,-1);
+		}
+		
+		if(!token){
+			reply.status(401).send("Authorization failed, no valid token");
+			return;
+		}
+		
+		else {
+			const decodedToken = await app.firebase.auth().verifyIdToken(token);
+			console.log(decodedToken);
+		}
+		
 		try{
 			
 				const user = await req.em.findOne(User, {email});

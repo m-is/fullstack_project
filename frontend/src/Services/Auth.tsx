@@ -1,6 +1,9 @@
 import { httpClient } from "@/Services/HttpClient.tsx";
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+
 
 export const AuthContext = createContext<AuthContextProps | null>(null);
 
@@ -14,6 +17,8 @@ const firebaseConfig = {
 	measurementId: "G-TJJ62R37J7"
 };
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 export type AuthContextProps = {
 	token: string | null;
@@ -74,6 +79,7 @@ export const AuthProvider = ({ children }: any) => {
 	
 	const handleLogout = () => {
 		setToken(null);
+		signOut(auth).then(response => console.log(response));
 		localStorage.removeItem("token");
 	};
 	
@@ -127,10 +133,13 @@ export async function getLoginTokenFromServer(email, password) {
 	 */
 	console.log("In get login token from server with ", email, password);
 	
+	const login_result = await signInWithEmailAndPassword(auth,email,password);
+	const token = await login_result.user.getIdToken();
+	console.log(token);
+	return token;
 	
-	
-	const login_result = await httpClient.post("/login", { email, password });
-	return login_result.data.token;
+	//const login_result = await httpClient.post("/login", { email, password });
+	//return login_result.data.token;
 	/*
 	
 	
@@ -167,5 +176,6 @@ export function getPayloadFromToken(token: string) {
 
 function getUserEmailFromToken(token: string) {
 	const payload = getPayloadFromToken(token);
+	console.log(payload.email);
 	return payload.email;
 }
