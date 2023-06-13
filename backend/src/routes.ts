@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 import { User } from "./db/entities/User.js";
 import { ICreateUsersBody } from "./types.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import admin from "firebase-admin"
 
 /** This function creates all backend routes for the site
  *
@@ -13,7 +12,7 @@ import admin from "firebase-admin"
  * @param {{}} _options - Fastify instance options (Optional)
  * @returns {Promise<void>} - Returns all of the initialized routes
  */
-async function DoggrRoutes(app: FastifyInstance, _options = {}) {
+async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 	if (!app) {
 		throw new Error("Fastify instance has no value during routes construction");
 	}
@@ -30,6 +29,24 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 		return request.em.find(Item, {});
 	});
 	
+	const verifyToken = async (req:FastifyRequest) => {
+		let token = null;
+		
+		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+			token = req.headers.authorization.split(' ')[1];
+			token = token.slice(1,-1);
+		}
+		
+		if(!token){
+			return(401);
+		}
+		
+		else {
+			const decodedToken = await app.firebase.auth().verifyIdToken(token);
+			console.log(decodedToken);
+			return decodedToken;
+		}
+	};
 
 	// Core method for adding generic SEARCH http method
 	// app.route<{Body: { email: string}}>({
@@ -96,7 +113,14 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	//READ
 	app.search("/users", async (req, reply) => {
 		const { email } = req.body;
-
+		
+		const verification = await verifyToken(req);
+		
+		if(verification===401||verification===null){
+			reply.status(401).send("Authorizatin failed, no valid token");
+			return;
+		}
+		
 		try {
 			const theUser = await req.em.findOne(User, { email });
 			console.log(theUser);
@@ -110,7 +134,14 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 	// UPDATE
 	app.put<{ Body: ICreateUsersBody }>("/users", async (req, reply) => {
 		const { username, email } = req.body;
-
+		
+		const verification = await verifyToken(req);
+		
+		if(verification===401||verification===null){
+			reply.status(401).send("Authorizatin failed, no valid token");
+			return;
+		}
+		
 		const userToChange = await req.em.findOne(User, { email });
 		userToChange.username = username;
 
@@ -174,116 +205,6 @@ async function DoggrRoutes(app: FastifyInstance, _options = {}) {
 		
 		 */
 	});
-	
-	//Add item to inventory route
-	app.post<{Body: { item: string, email: string } }>("/inventory", async (req, reply) =>{
-		const { item, email } = req.body;
-		let token = null;
-		
-		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-			token = req.headers.authorization.split(' ')[1];
-			token = token.slice(1,-1);
-		}
-		
-		if(!token){
-			reply.status(401).send("Authorization failed, no valid token");
-			return;
-		}
-		
-		else {
-			const decodedToken = await app.firebase.auth().verifyIdToken(token);
-			console.log(decodedToken);
-		}
-		
-		try{
-			
-				const user = await req.em.findOne(User, {email});
-				
-				const newItem = await req.em.create(Item, {
-					user,
-					name: item,
-				});
-				
-				
-				await req.em.flush();
-				return reply.send(newItem);
-			
-		 
-		} catch (err) {
-			console.error(err);
-			return reply.status(500).send(err);
-		}
-	})
-	
-	// A search method to retreive a user's inventory
-	app.search<{Body: { userEmail: string } }>("/inventory", async (req, reply )=> {
-		const { userEmail } = req.body;
-		
-		try{
-			const theUser = await req.em.find(User, {email: userEmail})
-			const inventory = await req.em.find(Item, User)
-			return reply.send(inventory);
-		} catch (err) {
-			return reply.status(500).send({message: err.message});
-		}
-	})
-
-
-	//Add new location to User's world map
-	app.post<{Body: { location: string, email: string } }>("/location", async (req, reply) => {
-		const { location, email} = req.body;
-		
-		try {
-			const user = await req.em.findOne(User, { email });
-			const newLocation = await req.em.create(Location, {
-				user,
-				name: location,
-				visited: false
-			})
-			
-			await req.em.flush();
-			return reply.send(newLocation);
-		} catch(err){
-			console.error(err);
-			return reply.status(500).send(err);
-			
-		}
-	})
-	
-	
-	// A search method to find the locations that a user has discovered
-	app.search<{Body: { userEmail: string } }>("/location", async (req, reply )=> {
-		const { userEmail } = req.body;
-		
-		try{
-			const theUser = await req.em.findOneOrFail(User, {email: userEmail})
-			const locations = await req.em.find(Location, {user_id: theUser.id})
-			return reply.send(locations);
-		} catch (err) {
-			return reply.status(500).send({message: err.message});
-		}
-	})
-
-	//Change a user's location from unvisited to visted
-	app.put<{Body: { location: string, email: string } }>("/location", async (req, reply) => {
-		const { location, email} = req.body;
-		
-		try {
-		
-			const user = await req.em.findOne(User, { email });
-			const toVisit = await req.em.findOne(Location, { user, name: location })
-			
-			toVisit.visited = true;
-			
-			await req.em.flush();
-			return reply.send(`${location} has been visited on ${email} user map`);
-		}
-		catch(err) {
-			console.error(err);
-			return reply.status(500).send(err);
-		}
-	})
-
 }
 
-export default DoggrRoutes;
+export default ZorpRoutes;

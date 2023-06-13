@@ -1,10 +1,12 @@
 import Fastify from "fastify";
 import config from "./db/mikro-orm.config.js";
 import cors from '@fastify/cors';
+import ItemRoutes from "./item_routes.js";
+import LocationRoutes from "./location_routes.js";
 import { firebasePlugin } from "./plugins/firebase.js";
 import { FastifySearchHttpMethodPlugin } from "./plugins/http_search.js";
 import { FastifyMikroOrmPlugin } from "./plugins/mikro.js";
-import DoggrRoutes from "./routes.js";
+import ZorpRoutes from "./routes.js";
 import fastifyFirebase from "@now-ims/fastify-firebase"
 
 const key = {
@@ -65,7 +67,9 @@ await app.register(cors, {
 await app.register(FastifyMikroOrmPlugin, config);
 await app.register(FastifySearchHttpMethodPlugin);
 await app.register(fastifyFirebase, {cert:key});
-await app.register(DoggrRoutes);
+await app.register(ZorpRoutes);
+await app.register(ItemRoutes);
+await app.register(LocationRoutes);
 //await app.register(firebasePlugin);
 
 export default app;
