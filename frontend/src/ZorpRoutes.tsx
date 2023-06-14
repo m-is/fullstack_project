@@ -4,6 +4,7 @@ import { Home } from "@/Components/Home.tsx";
 import { Login } from "@/Components/Login.tsx";
 import { Logout } from "@/Components/Logout.tsx";
 import { ProtectedRoute } from "@/Components/ProtectedRoute.tsx";
+import { SidePath } from "@/Components/SidePath.tsx";
 import { SignUp } from "@/Components/SignUp.tsx";
 import { WorldMap } from "@/Components/WorldMap.tsx";
 import { useAuth } from "@/Services/Auth.tsx";
@@ -46,6 +47,7 @@ export function ZorpRouter() {
 				<Route path="/logout" element={<Logout />}></Route>
 				<Route path="/farm" element={<ProtectedRoute><Farm /></ProtectedRoute>}/>
 				<Route path="/gates" element={<ProtectedRoute><Gates /></ProtectedRoute>}/>
+				<Route path="/side-path" element={<ProtectedRoute><SidePath /></ProtectedRoute>}/>
 			</Routes>
 		</div>
 	);

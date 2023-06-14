@@ -15,11 +15,11 @@ import { RecoilRoot } from "recoil";
 					{/*<ErrorBoundary fallback={<div>Something evil this way comes...</div>}>*/}
 					{/* Shows temp loading screen during async fetches */}
 					<Suspense fallback={<div>Loading...</div>}>
-				<AuthProvider>
-					<div className="App Zorp">
-						<ZorpRouter/>
-					</div>
-				</AuthProvider>
+						<AuthProvider>
+							<div className="App Zorp">
+								<ZorpRouter/>
+							</div>
+						</AuthProvider>
 					</Suspense>
 					{/*</ErrorBoundary>*/}
 				</RecoilRoot>
