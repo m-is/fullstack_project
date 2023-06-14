@@ -72,7 +72,7 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 	app.post<{ Body: ICreateUsersBody }>("/users", async (req, reply) => {
 		const { username, email, password } = req.body;
 		
-		const auth = getAuth(app.firebaseAuth)
+		const auth = getAuth(app.firebasePlugin)
 		
 		console.log(`email is ${email}`);
 		console.log(`password is ${password}`);
@@ -171,7 +171,7 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 	app.post<{ Body: { email: string; password: string } }>("/login", async (req, reply) => {
 		const { email, password } = req.body;
 		
-		const auth = getAuth(app.firebaseAuth);
+		const auth = getAuth(app.firebasePlugin);
 		
 		const authEmail = email;
 		const authPass = password;
