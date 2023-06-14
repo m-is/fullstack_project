@@ -31,14 +31,14 @@ async function LocationRoutes(app: FastifyInstance, _options = {}) {
 	//Add new location to User's world map
 	app.post<{Body: { location: string, email: string } }>("/location", async (req, reply) => {
 		const { location, email} = req.body;
-		
+		/*
 		const verification = await verifyToken(req);
 		
 		if(verification===401||verification===null){
 			reply.status(401).send("Authorizatin failed, no valid token");
 			return;
 		}
-		
+		*/
 		try {
 			const user = await req.em.findOne(User, { email });
 			const newLocation = await req.em.create(Location, {
@@ -61,13 +61,13 @@ async function LocationRoutes(app: FastifyInstance, _options = {}) {
 	app.search<{Body: { userEmail: string } }>("/location", async (req, reply )=> {
 		const { userEmail } = req.body;
 		
-		const verification = await verifyToken(req);
+		/*const verification = await verifyToken(req);
 		
 		if(verification===401||verification===null){
 			reply.status(401).send("Authorizatin failed, no valid token");
 			return;
 		}
-		
+		*/
 		try{
 			const theUser = await req.em.findOneOrFail(User, {email: userEmail})
 			const locations = await req.em.find(Location, {user_id: theUser.id})
@@ -80,14 +80,14 @@ async function LocationRoutes(app: FastifyInstance, _options = {}) {
 	//Change a user's location from unvisited to visted
 	app.put<{Body: { location: string, email: string } }>("/location", async (req, reply) => {
 		const { location, email} = req.body;
-		
+		/*
 		const verification = await verifyToken(req);
 		
 		if(verification===401||verification===null){
 			reply.status(401).send("Authorizatin failed, no valid token");
 			return;
 		}
-		
+		*/
 		try {
 			
 			const user = await req.em.findOne(User, { email });

@@ -8,3 +8,13 @@ export const playerInfo = atom({
 		inventory: null
 	},
 });
+
+export const locInfo = atom({
+	key: "locationInfo",
+	default: []
+});
+
+export const invenInfo = atom({
+	key: "inventoryInfo",
+	default: []
+});

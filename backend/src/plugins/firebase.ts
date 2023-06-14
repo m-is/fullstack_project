@@ -33,7 +33,7 @@ const key = {
 declare module 'fastify' {
 	
 	interface FastifyInstance {
-		firebase: any,
+		firebasePlugin: any,
 		firebaseAuth: any,
 	}
 }
@@ -41,7 +41,7 @@ declare module 'fastify' {
 export const firebasePlugin = fp(async function(app: FastifyInstance, opts: FastifyPluginOptions) {
 	
 	const firebase = initializeApp(firebaseConfig);
-	app.decorate("firebase", firebase);
+	app.decorate("firebasePlugin", firebase);
 	
 	const firebaseAuth = admin.initializeApp({
 		credential: admin.credential.cert("/home/d/workspace/FullstackWeb/fullstack_project/fullstack_project/backend/src/firebasePrivateKey.json")

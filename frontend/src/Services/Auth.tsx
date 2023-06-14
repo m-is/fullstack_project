@@ -17,8 +17,8 @@ const firebaseConfig = {
 	measurementId: "G-TJJ62R37J7"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const fb = initializeApp(firebaseConfig);
+const auth = getAuth(fb);
 
 export type AuthContextProps = {
 	token: string | null;
@@ -134,7 +134,7 @@ export async function getLoginTokenFromServer(email, password) {
 	console.log("In get login token from server with ", email, password);
 	
 	const login_result = await signInWithEmailAndPassword(auth,email,password);
-	const token = await login_result.user.getIdToken();
+	const token = await login_result.user.getIdToken(true);
 	console.log(token);
 	return token;
 	

@@ -4,14 +4,13 @@
 
 import { Dialogue } from "@/Components/DialogueBox.tsx";
 import { useAuth } from "@/Services/Auth.tsx";
-import { playerInfo } from "@/Services/RecoilState.tsx";
+import { invenInfo, locInfo, playerInfo } from "@/Services/RecoilState.tsx";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import farmIcon from "../assets/images/farm_icon.png";
 import gatesIcon from "../assets/images/gates_icon.png";
-import worldMap from "../assets/images/world_map.png";
 
 
 export const WorldMap = () => {
@@ -19,6 +18,9 @@ export const WorldMap = () => {
 	const [player, setPlayer ] = useRecoilState(playerInfo);
 	const [locationList, setLocationList] = useState([]);
 	const [inventoryList, setInventoryList] = useState([]);
+	const [locationInfo, setLocationInfo ] = useRecoilState(locInfo);
+	const [inventoryInfo, setInventoryInfo ] = useRecoilState(invenInfo);
+	
 	
 	const auth = useAuth();
 	
@@ -36,7 +38,10 @@ export const WorldMap = () => {
 			
 			return locationsRes.data;
 		};
-		getLocations().then(setLocationList);
+		
+		const setLocationValues = (newLocation) => setLocationInfo( (location) => location = newLocation);
+		
+		getLocations().then(setLocationValues);
 		
 		}, [auth.userEmail]);
 	
@@ -52,7 +57,9 @@ export const WorldMap = () => {
 			return inventoryRes.data;
 		};
 		
-		getInventory().then(setInventoryList);
+		const setInventoryValues = (newInventory) => setInventoryInfo( (inventory) => inventory = newInventory);
+		
+		getInventory().then(setInventoryValues);
 	},[auth.userEmail]);
 	
 	useEffect( () => {
@@ -69,14 +76,15 @@ export const WorldMap = () => {
 	
 	useEffect(  () => {
 		const map= [];
-		
-		locationList.forEach((location) => {
-			const value = Object.values(location);
-			map.push(value[1]);
-		});
+		if(locationInfo) {
+			locationInfo.forEach((location) => {
+				const value = Object.values(location);
+				map.push(value[1]);
+			});
+		}
 		
 		setMap(map);
-	},[locationList]);
+	},[locationInfo]);
 	
 	
 	

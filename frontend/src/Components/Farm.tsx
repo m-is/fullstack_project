@@ -1,7 +1,7 @@
 import { Dialogue } from "@/Components/DialogueBox.tsx";
 import { useAuth } from "@/Services/Auth.tsx";
 import { httpClient } from "@/Services/HttpClient.tsx";
-import { playerInfo } from "@/Services/RecoilState.tsx";
+import { invenInfo, locInfo, playerInfo } from "@/Services/RecoilState.tsx";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -10,9 +10,11 @@ import { useRecoilState } from "recoil";
 export const Farm = () => {
 	const navigate = useNavigate();
 	const auth = useAuth();
+	const [locationInfo, setLocationInfo] = useRecoilState(locInfo);
 	const [items, setItems] = useState([]);
 	const [visited, setVisited ] = useState(false);
 	const [player, setPlayer] = useRecoilState(playerInfo);
+	const [inventoryInfo, setInventoryInfo ] = useRecoilState(invenInfo);
 	const [dialogue_around, setDialogueAround ] = useState(false);
 	const [dialogue_sign, setDialogueSign ] = useState(false);
 	const [dialogue_shovel, setDialogueShovel ] = useState(false);
@@ -27,15 +29,15 @@ export const Farm = () => {
 	
 	useEffect( () => {
 		const items = [];
-		if (player.inventory) {
-			player.inventory.forEach((item) => {
+		if (inventoryInfo) {
+			inventoryInfo.forEach((item) => {
 				const values = Object.values(item);
 				items.push(values[1]);
 			});
 		}
 		
-		if(player.locations) {
-			player.locations.forEach((location) =>{
+		if(locationInfo) {
+			locationInfo.forEach((location) =>{
 				if(location.name==="farm" && location.visited===true){
 					setVisited(true);
 				}
@@ -43,11 +45,12 @@ export const Farm = () => {
 		}
 		
 		setItems(items);
-	}, [player]);
+	}, [player, locationInfo, inventoryInfo]);
 	
 	
 	const onShovelClick = () => {
-		const newInventory = player.inventory;
+		const newInventory = inventoryInfo;
+		
 		httpClient.post("/inventory",{email:auth.userEmail, item:"shovel"})
 			.then( (response) =>{
 				newInventory.push(response.data);
@@ -56,17 +59,13 @@ export const Farm = () => {
 			.catch(err =>{
 				console.error(err);
 			});
+		
 		if(!items.includes("shovel")){
 			items.push("shovel");
 		}
-		const setValues= (newPlayer) => setPlayer( (player) => player = newPlayer);
+		const setValues= (newInventory) => setInventoryInfo( (inventory) => inventory = newInventory);
 		
-		const newPlayer = {
-			email: auth.userEmail,
-			locations: player.locations,
-			inventory: newInventory,
-		};
-		setValues(newPlayer);
+		setValues(newInventory);
 		
 		setDialogueShovel(true);
 		setItems(items);

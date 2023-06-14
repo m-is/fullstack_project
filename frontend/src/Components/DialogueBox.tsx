@@ -18,7 +18,6 @@ export const Dialogue = (text) => {
 };
 
 const DialogueBox = (text) => {
-	console.log(text);
 	return(
 		<div >
 			<p>{`${text.text}`}</p>

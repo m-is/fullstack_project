@@ -70,6 +70,6 @@ await app.register(fastifyFirebase, {cert:key});
 await app.register(ZorpRoutes);
 await app.register(ItemRoutes);
 await app.register(LocationRoutes);
-//await app.register(firebasePlugin);
+await app.register(firebasePlugin);
 
 export default app;

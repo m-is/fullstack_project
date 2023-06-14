@@ -30,14 +30,14 @@ async function ItemRoutes(app: FastifyInstance, _options = {}) {
 	//Add item to inventory route
 	app.post<{Body: { item: string, email: string } }>("/inventory", async (req, reply) =>{
 		const { item, email } = req.body;
-		
+	/*
 		const verification = await verifyToken(req);
 		
 		if(verification===401||verification===null){
 			reply.status(401).send("Authorizatin failed, no valid token");
 			return;
 		}
-		
+		*/
 		try{
 			
 			const user = await req.em.findOne(User, {email});
@@ -62,17 +62,17 @@ async function ItemRoutes(app: FastifyInstance, _options = {}) {
 	// A search method to retreive a user's inventory
 	app.search<{Body: { userEmail: string } }>("/inventory", async (req, reply )=> {
 		const { userEmail } = req.body;
-		
+		/*
 		const verification = await verifyToken(req);
 		
 		if(verification===401||verification===null){
 			reply.status(401).send("Authorizatin failed, no valid token");
 			return;
 		}
-		
+		*/
 		try{
-			const theUser = await req.em.find(User, {email: userEmail})
-			const inventory = await req.em.find(Item, User)
+			const theUser = await req.em.findOneOrFail(User, {email: userEmail})
+			const inventory = await req.em.find(Item, {user_id: theUser.id})
 			return reply.send(inventory);
 		} catch (err) {
 			return reply.status(500).send({message: err.message});

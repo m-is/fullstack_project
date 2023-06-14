@@ -72,7 +72,7 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 	app.post<{ Body: ICreateUsersBody }>("/users", async (req, reply) => {
 		const { username, email, password } = req.body;
 		
-		const auth = getAuth(app.firebase)
+		const auth = getAuth(app.firebaseAuth)
 		
 		console.log(`email is ${email}`);
 		console.log(`password is ${password}`);
@@ -113,14 +113,14 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 	//READ
 	app.search("/users", async (req, reply) => {
 		const { email } = req.body;
-		
+		/*
 		const verification = await verifyToken(req);
 		
 		if(verification===401||verification===null){
 			reply.status(401).send("Authorizatin failed, no valid token");
 			return;
 		}
-		
+		*/
 		try {
 			const theUser = await req.em.findOne(User, { email });
 			console.log(theUser);
@@ -134,14 +134,14 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 	// UPDATE
 	app.put<{ Body: ICreateUsersBody }>("/users", async (req, reply) => {
 		const { username, email } = req.body;
-		
+		/*
 		const verification = await verifyToken(req);
 		
 		if(verification===401||verification===null){
 			reply.status(401).send("Authorizatin failed, no valid token");
 			return;
 		}
-		
+		*/
 		const userToChange = await req.em.findOne(User, { email });
 		userToChange.username = username;
 
@@ -171,7 +171,7 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 	app.post<{ Body: { email: string; password: string } }>("/login", async (req, reply) => {
 		const { email, password } = req.body;
 		
-		const auth = getAuth(app.firebase);
+		const auth = getAuth(app.firebaseAuth);
 		
 		const authEmail = email;
 		const authPass = password;
