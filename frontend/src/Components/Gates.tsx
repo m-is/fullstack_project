@@ -89,7 +89,7 @@ export const Gates = () => {
 	//Add button to speak to guards and to travel down the path
 	return(
 		<div className={"gates-page background"}>
-			{ dialogue_guard && <Dialogue text={`${lookAroundDescription}`}/>}
+			{ dialogue_guard && <Dialogue text={`${guardDialogue}`}/>}
 			{ dialogue_around && <Dialogue text={`${lookAroundDescription}`}/>}
 			<button className={"look-around"} onClick={onLookAround} >Look Around</button>
 			<button className={"leave-button"} onClick={navigateToMap}>Leave</button>

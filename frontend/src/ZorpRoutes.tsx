@@ -48,6 +48,7 @@ export function ZorpRouter() {
 				<Route path="/farm" element={<ProtectedRoute><Farm /></ProtectedRoute>}/>
 				<Route path="/gates" element={<ProtectedRoute><Gates /></ProtectedRoute>}/>
 				<Route path="/side-path" element={<ProtectedRoute><SidePath /></ProtectedRoute>}/>
+				<Route path="/city" element={<ProtectedRoute><SidePath /></ProtectedRoute>}/>
 			</Routes>
 		</div>
 	);

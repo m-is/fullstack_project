@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import farmIcon from "../assets/images/farm_icon.png";
 import gatesIcon from "../assets/images/gates_icon.png";
-
+import cityIcon from "../assets/images/city_icon.png";
 
 export const WorldMap = () => {
 	const navigate = useNavigate();
@@ -98,14 +98,20 @@ export const WorldMap = () => {
 		navigate(path);
 	};
 	
+	const navigateToCity = () => {
+		const path = "/city";
+		navigate(path);
+	};
 	
 	return (
 		
 		<div className={"world-map background"}>
-			<Dialogue text="WELCOME TO ZORP"></Dialogue>
 				<button id={"farm-icon"}><img  className={"map-icon"} src={farmIcon} alt={"Icon for farm location"} onClick={navigateToFarm} /></button>
 			{ map.includes("gates") ? (
 				<button id={"gates-icon"}><img className={"map-icon"} src={gatesIcon} alt={"Icon for town gates location"} onClick={navigateToGates} /></button>
+			) : null }
+			{ map.includes("city") ? (
+				<button id={"city-icon"}><img className={"map-icon"} src={cityIcon} alt={"Icon for city location"} onClick={navigateToCity} /></button>
 			) : null }
 			
 		</div>

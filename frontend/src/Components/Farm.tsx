@@ -117,8 +117,9 @@ export const Farm = () => {
 					}
 					<button id={"look-at-sign"} onClick={onLookAtSign}>Look At Sign</button>
 				</>
-				) : null}
-				<button className={"leave-button"} onClick={navigateToMap}>Leave</button>
+				) : null
+			}
+			<button className={"leave-button"} onClick={navigateToMap}>Leave</button>
 		</div>
 	);
 	
