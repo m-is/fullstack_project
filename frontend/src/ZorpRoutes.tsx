@@ -1,3 +1,4 @@
+import { City } from "@/Components/City.tsx";
 import { Farm } from "@/Components/Farm.tsx";
 import { Gates } from "@/Components/Gates.tsx";
 import { Home } from "@/Components/Home.tsx";
@@ -6,6 +7,7 @@ import { Logout } from "@/Components/Logout.tsx";
 import { ProtectedRoute } from "@/Components/ProtectedRoute.tsx";
 import { SidePath } from "@/Components/SidePath.tsx";
 import { SignUp } from "@/Components/SignUp.tsx";
+import { Village } from "@/Components/Village.tsx";
 import { WorldMap } from "@/Components/WorldMap.tsx";
 import { useAuth } from "@/Services/Auth.tsx";
 
@@ -48,7 +50,8 @@ export function ZorpRouter() {
 				<Route path="/farm" element={<ProtectedRoute><Farm /></ProtectedRoute>}/>
 				<Route path="/gates" element={<ProtectedRoute><Gates /></ProtectedRoute>}/>
 				<Route path="/side-path" element={<ProtectedRoute><SidePath /></ProtectedRoute>}/>
-				<Route path="/city" element={<ProtectedRoute><SidePath /></ProtectedRoute>}/>
+				<Route path="/city" element={<ProtectedRoute><City /></ProtectedRoute>}/>
+				<Route path="/village" element={<ProtectedRoute><Village /></ProtectedRoute>}/>
 			</Routes>
 		</div>
 	);

@@ -95,8 +95,8 @@ export const Gates = () => {
 			<button className={"leave-button"} onClick={navigateToMap}>Leave</button>
 			{ visited ? (
 				<>
-					<button className={"guard-dialogue"} onClick={onSpeakToGuard}>Leave</button>
-					<button className={"side-path"} onClick={onTakePath}>Leave</button>
+					<button id={"guard-dialogue"} onClick={onSpeakToGuard}>Speak To Guard</button>
+					<button id={"side-path"} onClick={onTakePath}>Follow Side-Path</button>
 				</>
 			) : null}
 		</div>

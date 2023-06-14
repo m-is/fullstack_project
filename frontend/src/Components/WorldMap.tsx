@@ -12,6 +12,7 @@ import { useRecoilState } from "recoil";
 import farmIcon from "../assets/images/farm_icon.png";
 import gatesIcon from "../assets/images/gates_icon.png";
 import cityIcon from "../assets/images/city_icon.png";
+import villageIcon from "../assets/images/village_icon.png";
 
 export const WorldMap = () => {
 	const navigate = useNavigate();
@@ -103,6 +104,10 @@ export const WorldMap = () => {
 		navigate(path);
 	};
 	
+	const navigateToVillage = () =>{
+		navigate("/village");
+	};
+	
 	return (
 		
 		<div className={"world-map background"}>
@@ -112,6 +117,9 @@ export const WorldMap = () => {
 			) : null }
 			{ map.includes("city") ? (
 				<button id={"city-icon"}><img className={"map-icon"} src={cityIcon} alt={"Icon for city location"} onClick={navigateToCity} /></button>
+			) : null }
+			{ map.includes("village") ? (
+				<button id={"village-icon"}><img className={"map-icon"} src={villageIcon} alt={"Icon for village location"} onClick={navigateToVillage} /></button>
 			) : null }
 			
 		</div>

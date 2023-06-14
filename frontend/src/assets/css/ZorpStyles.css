@@ -86,6 +86,13 @@ World map styling
     grid-column-end: 11;
 }
 
+#village-icon{
+    grid-row-start: 5;
+    grid-row-end: 6;
+    grid-column-start: 5;
+    grid-column-end: 6;
+}
+
 .map-icon{
     height: 80px;
     width: 80px;
@@ -200,40 +207,50 @@ Farm page styling
 Gates page styling
  */
 #guard-dialogue{
-    grid-row-start: 5;
-    grid-row-end: 6;
-    grid-column-start: 5;
+    grid-row-start: 9;
+    grid-row-end: 10;
+    grid-column-start: 4;
     grid-column-end: 6;
 }
 #side-path{
-    grid-row-start: 9;
-    grid-row-end: 10;
+    grid-row-start: 10;
+    grid-row-end: 11;
     grid-column-start: 9;
-    grid-column-end: 10;
+    grid-column-end: 11;
 }
 
 /*
 Side-path styling
  */
 #dig-interaction{
-    grid-row-start: 9;
-    grid-row-end: 10;
+    grid-row-start: 10;
+    grid-row-end: 11;
     grid-column-start: 5;
-    grid-column-end: 6;
+    grid-column-end: 7;
 }
 
 /*
-City stlying
+City styling
  */
 #grab-coin{
-    grid-row-start: 6;
-    grid-row-end: 7;
-    grid-column-start: 7;
-    grid-column-end: 8;
+    grid-row-start: 10;
+    grid-row-end: 11;
+    grid-column-start: 5;
+    grid-column-end: 7;
 }
 #talk-to-woman{
-    grid-row-start: 8;
-    grid-row-end: 9;
-    grid-column-start: 5;
-    grid-column-end: 6;
+    grid-row-start: 7;
+    grid-row-end: 8;
+    grid-column-start: 2;
+    grid-column-end: 4;
+}
+
+/*
+Village styling
+ */
+#enter-shop{
+    grid-row-start: 9;
+    grid-row-end: 10;
+    grid-column-start: 7;
+    grid-column-end: 9;
 }

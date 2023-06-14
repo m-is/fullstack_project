@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 
-export const SidePath = () => {
+export const Village = () => {
 	const navigate = useNavigate();
 	const auth = useAuth();
 	const [player, setPlayer] = useRecoilState(playerInfo);
@@ -15,9 +15,8 @@ export const SidePath = () => {
 	const [items, setItems] = useState([]);
 	const [visited, setVisited ] = useState(false);
 	const [dialogue_around, setDialogueAround ] = useState(false);
-	const lookAroundDescription = "Further down the wall you notice the ground turns from dense hardpacked dirt to softer silt." +
-		" At one point in the wall you notice the dirt is especially soft and the wall's foundation doesn't look too deep. " +
-		"If you had a shovel you could probably dig enough space to crawl below the wall.";
+	const lookAroundDescription = "You enter a shabby village. It's eerily quiet and none of the houses look like they've had habitants for many years." +
+		" Oddly, there's a shop open near the village entrance, and you can hear someone loudly mumbling to themselves within.";
 	
 	useEffect( () => {
 		const items = [];
@@ -30,7 +29,7 @@ export const SidePath = () => {
 		
 		if(locationInfo) {
 			locationInfo.forEach((location) =>{
-				if(location.name==="gates" && location.visited===true){
+				if(location.name==="village" && location.visited===true){
 					setVisited(true);
 				}
 			});
@@ -40,7 +39,7 @@ export const SidePath = () => {
 	}, [player, locationInfo, inventoryInfo]);
 	
 	const onLookAround = () => {
-		httpClient.put("/location", { location: "side-path", email: auth.userEmail })
+		httpClient.put("/location", { location: "village", email: auth.userEmail })
 			.then((response) => {
 				console.log(response.status);
 			})
@@ -52,29 +51,21 @@ export const SidePath = () => {
 		setVisited(true);
 	};
 	
-	const navigateToGates = () => {
-		navigate(-1);
+	const navigateToMap = () => {
+		navigate("/map");
 	};
 	
-	const onDigInteraction = () => {
-		httpClient.post("/location", { location: "city", email:auth.userEmail})
-			.then((response) => {
-				console.log(response.status);
-			})
-			.catch(err => {
-				console.error(err);
-			});
-		const path = "/city";
-		navigate(path);
+	const navigateToShop = () => {
+		navigate("/village");
 	};
 	
 	
 	return(
-		<div className={"path-page background"}>
+		<div className={"village-page background"}>
 			<button className={"look-around"} onClick={onLookAround} >Look Around</button>
 			{ dialogue_around && <Dialogue text={`${lookAroundDescription}`}/>}
-			{ items.includes("shovel")&&visited ? <button id={"dig-interaction"} onClick={onDigInteraction}>Use Shovel</button>	: null}
-			<button className={"leave-button"} onClick={navigateToGates}>Go back</button>
+			<button className={"leave-button"} onClick={navigateToMap}>Go back</button>
+			{ visited ? <button id={"enter-shop"} onClick={navigateToShop}>Enter Shop</button> : null }
 		</div>
 	);
 };

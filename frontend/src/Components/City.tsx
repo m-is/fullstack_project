@@ -24,7 +24,7 @@ export const City = () => {
 	const mysteriousWomanDialogue = `You walk up to the old woman to begin a conversation but she speaks before you, "You're not from here. Things aren't right in this city, you should leave and make your way north as soon as possible.
 	 There's a mine nested at the foot of the mountains, it's a passage through to lands the Sun hasn't forgotten.
 	 Whatever you do, do not enter the alleyway between the old inn and the city hall, no one who's entered has ever left." You try to question her further but she remains mute.`;
-	const coinDialogue = "You jump into the fountain to grab one of the coins scattered at the bottom. For a moment everyone the entire pavillion stops and watches you, but the second you step out of the fountain they turn as if nothing happened. You've acquired a shiny coin.";
+	const coinDialogue = "You jump into the fountain to grab one of the coins scattered at the bottom. For a moment everyone in the pavillion stops and watches you, but the second you step out of the fountain they turn as if nothing happened. You've acquired a shiny coin.";
 	
 	useEffect( () => {
 		const items = [];
@@ -37,7 +37,7 @@ export const City = () => {
 		
 		if(locationInfo) {
 			locationInfo.forEach((location) =>{
-				if(location.name==="gates" && location.visited===true){
+				if(location.name==="city" && location.visited===true){
 					setVisited(true);
 				}
 			});
@@ -47,7 +47,7 @@ export const City = () => {
 	}, [player, locationInfo, inventoryInfo]);
 	
 	const navigateToMap = () =>{
-		const path = "/path";
+		const path = "/map";
 		navigate(path);
 	};
 	
@@ -60,6 +60,7 @@ export const City = () => {
 					console.error(err);
 				});
 			setDialogueAround(true);
+			setVisited(true);
 	};
 	
 	const onCoinClick = () => {
@@ -100,9 +101,9 @@ export const City = () => {
 			{ visited ? (
 				<>
 					{items.includes("coin") ? null :
-						<button id={"grab-coin"} onClick={onCoinClick}>Grab Shovel</button>
+						<button id={"grab-coin"} onClick={onCoinClick}>Grab Coin</button>
 					}
-					<button id={"talk-to-woman"} onClick={onSpeakToWoman}>Look At Sign</button>
+					<button id={"talk-to-woman"} onClick={onSpeakToWoman}>Talk To Woman</button>
 				</>
 			) : null
 			}
