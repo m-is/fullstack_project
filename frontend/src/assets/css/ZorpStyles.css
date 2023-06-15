@@ -42,31 +42,31 @@ World map styling
 }
 
 .world-map{
-    background-image: url("src/assets/images/world_map.png");
+    background-image: url("../../../public/world_map.png");
 }
 
 .farm-page{
-    background-image: url("src/assets/images/farm_background.png");
+    background-image: url("../../../public/farm_background.png");
 }
 
 .gates-page{
-    background-image: url("src/assets/images/gates_background.png");
+    background-image: url("../../../public/gates_background.png");
 }
 
 .path-page{
-    background-image: url("src/assets/images/sidepath_background.png");
+    background-image: url("../../../public/sidepath_background.png");
 }
 
 .city-page{
-    background-image: url("src/assets/images/city_background.png");
+    background-image: url("../../../public/city_background.png");
 }
 
 .village-page{
-    background-image: url("src/assets/images/village_background.png");
+    background-image: url("../../../public/village_background.png");
 }
 
 .shop-page{
-    background-image: url("src/assets/images/shop_background.png");
+    background-image: url("../../../public/shop_background.png");
 }
 
 #farm-icon{
@@ -304,4 +304,9 @@ Endings styling
     border-color: white;
     color: white;
     background-color: black;
+}
+
+#end-img{
+    height: 200px;
+    width: 200px;
 }

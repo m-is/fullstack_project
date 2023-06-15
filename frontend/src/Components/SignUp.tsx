@@ -1,5 +1,6 @@
 import { httpClient } from "@/Services/HttpClient.tsx";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export enum SubmissionStatus {
 	NotSubmitted,
@@ -13,6 +14,7 @@ export const SignUp = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [submitted, setSubmitted] = useState(SubmissionStatus.NotSubmitted);
+	const navigate = useNavigate();
 	
 	const onUploadFile = (ev) => {
 		const formData = new FormData();
@@ -44,6 +46,7 @@ export const SignUp = () => {
 				console.log(response.status);
 				if (response.status === 200) {
 					setSubmitted(SubmissionStatus.SubmitSucceeded);
+					navigate("/");
 				} else {
 					setSubmitted(SubmissionStatus.SubmitFailed);
 				}

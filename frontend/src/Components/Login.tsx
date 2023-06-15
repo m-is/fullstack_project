@@ -1,8 +1,10 @@
 import { useAuth } from "@/Services/Auth.tsx";
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
 	const context = useAuth();
+	const navigate = useNavigate();
 	
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -13,6 +15,9 @@ export function Login() {
 			const loginSuccess = await context.handleLogin(email, password);
 			if(!loginSuccess) {
 				setSubmitFailed(true);
+			}
+			else{
+				navigate("/");
 			}
 		} else {
 			console.error("[WARNING] NO AUTH CONTEXT [WARNING]");

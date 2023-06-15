@@ -28,6 +28,7 @@ export type AuthContextProps = {
 };
 
 const updateAxios = async (token: string) => {
+	console.log(`In changing header auth with ${token}`);
 	httpClient.interceptors.request.use(
 		async (config) => {
 			// @ts-ignore

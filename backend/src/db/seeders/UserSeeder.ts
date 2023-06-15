@@ -10,25 +10,21 @@ export class UserSeeder extends Seeder {
 		context.user1 = em.create(User, {
 			username: "Spot",
 			email: "email@email.com",
-			password: hashedPw,
 		});
 
 		context.user2 = em.create(User, {
 			username: "Dogbert",
 			email: "email2@email.com",
-			password: hashedPw,
 		});
 
 		context.user3 = em.create(User, {
 			username: "Doglord",
 			email: "email3@email.com",
-			password: hashedPw,
 		});
 
 		context.user4 = em.create(User, {
 			username: "NotaDog",
 			email: "email4@email.com",
-			password: hashedPw,
 		});
 	}
 }

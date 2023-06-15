@@ -46,6 +46,13 @@ export const Village = () => {
 			.catch(err => {
 				console.error(err);
 			});
+		httpClient.post("/location", { location: "shop", email: auth.userEmail })
+			.then((response) => {
+				console.log(response.status);
+			})
+			.catch(err => {
+				console.error(err);
+			});
 		
 		setDialogueAround(true);
 		setVisited(true);

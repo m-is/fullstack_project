@@ -17,7 +17,9 @@ async function ItemRoutes(app: FastifyInstance, _options = {}) {
 		
 		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
 			token = req.headers.authorization.split(' ')[1];
-			token = token.slice(1,-1);
+			if(token[0]===`"`){
+				token = token.slice(1,-1);
+			}
 		}
 		
 		if(!token){
@@ -25,6 +27,7 @@ async function ItemRoutes(app: FastifyInstance, _options = {}) {
 		}
 		
 		else {
+			//@ts-ignore
 			const decodedToken = await app.firebase.auth().verifyIdToken(token);
 		}
 		
@@ -57,7 +60,9 @@ async function ItemRoutes(app: FastifyInstance, _options = {}) {
 		
 		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
 			token = req.headers.authorization.split(' ')[1];
-			token = token.slice(1,-1);
+			if(token[0]===`"`){
+				token = token.slice(1,-1);
+			}
 		}
 		
 		if(!token){
@@ -65,6 +70,7 @@ async function ItemRoutes(app: FastifyInstance, _options = {}) {
 		}
 		
 		else {
+			//@ts-ignore
 			const decodedToken = await app.firebase.auth().verifyIdToken(token);
 		}
 		

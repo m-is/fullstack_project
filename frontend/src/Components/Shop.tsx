@@ -50,6 +50,13 @@ export const Shop = () => {
 	}, [player, locationInfo, inventoryInfo]);
 	
 	const onLookAround = () => {
+		httpClient.put("/location", { location: "shop", email: auth.userEmail })
+			.then((response) => {
+				console.log(response.status);
+			})
+			.catch(err => {
+				console.error(err);
+			});
 		setDialogueAround(true);
 		setVisited(true);
 	};

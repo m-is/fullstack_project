@@ -29,24 +29,6 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 		return request.em.find(Item, {});
 	});
 	
-	const verifyToken = async (req:FastifyRequest) => {
-		let token = null;
-		
-		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-			token = req.headers.authorization.split(' ')[1];
-			token = token.slice(1,-1);
-		}
-		
-		if(!token){
-			return(401);
-		}
-		
-		else {
-			const decodedToken = await app.firebase.auth().verifyIdToken(token);
-			console.log(decodedToken);
-			return decodedToken;
-		}
-	};
 
 	// Core method for adding generic SEARCH http method
 	// app.route<{Body: { email: string}}>({
@@ -88,7 +70,6 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 			const newUser = await req.em.create(User, {
 				email,
 				username,
-				password:hashedPw
 			});
 			
 			await req.em.flush();
@@ -113,14 +94,7 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 	//READ
 	app.search("/users", async (req, reply) => {
 		const { email } = req.body;
-		/*
-		const verification = await verifyToken(req);
 		
-		if(verification===401||verification===null){
-			reply.status(401).send("Authorizatin failed, no valid token");
-			return;
-		}
-		*/
 		try {
 			const theUser = await req.em.findOne(User, { email });
 			console.log(theUser);
@@ -134,14 +108,7 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 	// UPDATE
 	app.put<{ Body: ICreateUsersBody }>("/users", async (req, reply) => {
 		const { username, email } = req.body;
-		/*
-		const verification = await verifyToken(req);
 		
-		if(verification===401||verification===null){
-			reply.status(401).send("Authorizatin failed, no valid token");
-			return;
-		}
-		*/
 		const userToChange = await req.em.findOne(User, { email });
 		userToChange.username = username;
 
@@ -172,7 +139,9 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 		
 		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
 			token = req.headers.authorization.split(' ')[1];
-			token = token.slice(1,-1);
+			if(token[0]===`"`){
+				token = token.slice(1,-1);
+			}
 		}
 		
 		if(!token){
@@ -180,6 +149,7 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 		}
 		
 		else {
+			//@ts-ignore
 			const decodedToken = await app.firebase.auth().verifyIdToken(token);
 			
 			try{
