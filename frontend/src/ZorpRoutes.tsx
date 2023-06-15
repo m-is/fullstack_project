@@ -5,6 +5,7 @@ import { Home } from "@/Components/Home.tsx";
 import { Login } from "@/Components/Login.tsx";
 import { Logout } from "@/Components/Logout.tsx";
 import { ProtectedRoute } from "@/Components/ProtectedRoute.tsx";
+import { Shop } from "@/Components/Shop.tsx";
 import { SidePath } from "@/Components/SidePath.tsx";
 import { SignUp } from "@/Components/SignUp.tsx";
 import { Village } from "@/Components/Village.tsx";
@@ -52,6 +53,7 @@ export function ZorpRouter() {
 				<Route path="/side-path" element={<ProtectedRoute><SidePath /></ProtectedRoute>}/>
 				<Route path="/city" element={<ProtectedRoute><City /></ProtectedRoute>}/>
 				<Route path="/village" element={<ProtectedRoute><Village /></ProtectedRoute>}/>
+				<Route path="/shop" element={<ProtectedRoute><Shop /></ProtectedRoute>}/>
 			</Routes>
 		</div>
 	);

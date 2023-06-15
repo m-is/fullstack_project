@@ -2,17 +2,18 @@
 //Boot player from here if no auth
 //If player tries to visit undiscovered location give them a "you are lost" page
 
-import { Dialogue } from "@/Components/DialogueBox.tsx";
+import { GoodEnd } from "@/Components/GoodEnd.tsx";
 import { useAuth } from "@/Services/Auth.tsx";
+import { httpClient } from "@/Services/HttpClient.tsx";
 import { invenInfo, locInfo, playerInfo } from "@/Services/RecoilState.tsx";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import farmIcon from "../assets/images/farm_icon.png";
 import gatesIcon from "../assets/images/gates_icon.png";
 import cityIcon from "../assets/images/city_icon.png";
 import villageIcon from "../assets/images/village_icon.png";
+import minesIcon from "../assets/images/mines_icon.png";
 
 export const WorldMap = () => {
 	const navigate = useNavigate();
@@ -21,7 +22,7 @@ export const WorldMap = () => {
 	const [inventoryList, setInventoryList] = useState([]);
 	const [locationInfo, setLocationInfo ] = useRecoilState(locInfo);
 	const [inventoryInfo, setInventoryInfo ] = useRecoilState(invenInfo);
-	
+	const [goodEnd, setGoodEnd ]	= useState(false);
 	
 	const auth = useAuth();
 	
@@ -30,13 +31,7 @@ export const WorldMap = () => {
 	useEffect( () => {
 		
 		const getLocations = async () => {
-			const locationsRes = await axios({
-				method: 'search',
-				url: 'http://localhost:8080/location',
-				data:{ userEmail: auth.userEmail }
-				}
-			);
-			
+			const locationsRes = await httpClient.search("/location", {userEmail:auth.userEmail});
 			return locationsRes.data;
 		};
 		
@@ -49,12 +44,7 @@ export const WorldMap = () => {
 	useEffect( () => {
 		
 		const getInventory = async () => {
-			const inventoryRes = await axios({
-				method: 'search',
-				url: 'http://localhost:8080/inventory',
-				data: { userEmail: auth.userEmail }
-			});
-			
+			const inventoryRes = await httpClient.search("/inventory",{ userEmail: auth.userEmail });
 			return inventoryRes.data;
 		};
 		
@@ -108,9 +98,14 @@ export const WorldMap = () => {
 		navigate("/village");
 	};
 	
+	const navigateToMines = () =>{
+		setGoodEnd(true);
+	};
+	
 	return (
 		
 		<div className={"world-map background"}>
+			{ goodEnd && <GoodEnd />}
 				<button id={"farm-icon"}><img  className={"map-icon"} src={farmIcon} alt={"Icon for farm location"} onClick={navigateToFarm} /></button>
 			{ map.includes("gates") ? (
 				<button id={"gates-icon"}><img className={"map-icon"} src={gatesIcon} alt={"Icon for town gates location"} onClick={navigateToGates} /></button>
@@ -121,16 +116,11 @@ export const WorldMap = () => {
 			{ map.includes("village") ? (
 				<button id={"village-icon"}><img className={"map-icon"} src={villageIcon} alt={"Icon for village location"} onClick={navigateToVillage} /></button>
 			) : null }
+			{ map.includes("mines") ? (
+				<button id={"mines-icon"}><img className={"map-icon"} src={minesIcon} alt={"Icon for mines location"} onClick={navigateToMines} /></button>
+			) : null }
 			
 		</div>
 	);
 };
 
-
-
-export function TownCenterIcon() {
-	return(
-		//add onClick event to link to town center page/component
-		<img src={""} alt={"Icon for town center location"}/>
-	);
-}

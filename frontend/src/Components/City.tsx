@@ -87,6 +87,13 @@ export const City = () => {
 	};
 	
 	const onSpeakToWoman = () => {
+		httpClient.post("/location", {email:auth.userEmail, location:"mines"})
+			.then( (response) =>{
+				console.log(response.status);
+			})
+			.catch(err => {
+				console.error(err);
+			});
 		setDialogueWoman(true);
 	};
 	

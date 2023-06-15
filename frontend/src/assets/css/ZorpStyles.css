@@ -65,6 +65,10 @@ World map styling
     background-image: url("src/assets/images/village_background.png");
 }
 
+.shop-page{
+    background-image: url("src/assets/images/shop_background.png");
+}
+
 #farm-icon{
     grid-row-start: 9;
     grid-row-end: 10;
@@ -91,6 +95,13 @@ World map styling
     grid-row-end: 6;
     grid-column-start: 5;
     grid-column-end: 6;
+}
+
+#mines-icon{
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 4;
+    grid-column-end: 5;
 }
 
 .map-icon{
@@ -253,4 +264,26 @@ Village styling
     grid-row-end: 10;
     grid-column-start: 7;
     grid-column-end: 9;
+}
+
+/*
+Endings styling
+ */
+
+#good-end{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    position:relative;
+    grid-row-start: 3;
+    grid-row-end: 9;
+    grid-column-start: 3;
+    grid-column-end: 9;
+    border-width: thick;
+    border-style: solid;
+    border-color: white;
+    color: white;
+    background-color: black;
 }

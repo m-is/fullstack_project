@@ -157,7 +157,6 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 
 		try {
 			const theUser = await req.em.findOne(User, { email });
-
 			await req.em.remove(theUser).flush();
 			console.log(theUser);
 			reply.send(theUser);
@@ -166,45 +165,52 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 			reply.status(500).send(err);
 		}
 	});
-
-	// Login route
-	app.post<{ Body: { email: string; password: string } }>("/login", async (req, reply) => {
-		const { email, password } = req.body;
+	
+	app.delete("/gameover", async(req, reply) => {
 		
-		const auth = getAuth(app.firebasePlugin);
+		let token;
 		
-		const authEmail = email;
-		const authPass = password;
-		
-		const login = await signInWithEmailAndPassword(auth,authEmail,authPass);
-		
-		const token = await login.user.getIdToken();
-		
-		reply.send({ token});
-		
-		
-		/*
-		try {
-			const theUser = await req.em.findOneOrFail(User, {email}, {strict: true})
-			
-			const hashCompare = await bcrypt.compare(password, theUser.password);
-			
-			if(hashCompare) {
-				const userId = theUser.id;
-				const token = app.jwt.sign({userId});
-				
-				reply.send({token});
-			} else{
-				app.log.info(`Password validation failed -- ${password} vs ${theUser.password}`)
-				reply.status(401).send("Failed authentication, incorrect password");
-			}
-		} catch (err) {
-			console.error(err);
-			return reply.status(500).send(err);
+		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+			token = req.headers.authorization.split(' ')[1];
+			token = token.slice(1,-1);
 		}
 		
-		 */
+		if(!token){
+			return reply.status(401).send();
+		}
+		
+		else {
+			const decodedToken = await app.firebase.auth().verifyIdToken(token);
+			console.log(decodedToken);
+			
+			const email = decodedToken.email;
+			
+			try{
+				const theUser = await req.em.findOneOrFail(User, { email });
+				//@ts-ignore
+				const locations = await req.em.find(Location, {user_id: theUser.id});
+				//@ts-ignore
+				const inventory = await req.em.find(Item, {user_id: theUser.id});
+			
+				await req.em.removeAndFlush(locations);
+				await req.em.removeAndFlush(inventory);
+			
+				const newLocation = await req.em.create(Location, {
+					user: theUser,
+					name: "farm",
+					visited: false
+				})
+			
+				await req.em.flush();
+			
+				reply.send(`${theUser.username} has game-overed and is now back at the farm`);
+			} catch(err) {
+				console.error(err);
+				reply.status(500).send(err);
+			}
+		}
 	});
+	
 }
 
 export default ZorpRoutes;

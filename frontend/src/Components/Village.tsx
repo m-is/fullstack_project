@@ -56,7 +56,7 @@ export const Village = () => {
 	};
 	
 	const navigateToShop = () => {
-		navigate("/village");
+		navigate("/shop");
 	};
 	
 	
