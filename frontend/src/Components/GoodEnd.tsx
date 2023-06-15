@@ -7,7 +7,7 @@ export const GoodEnd = () => {
 	return (
 		<>
 			{showWindow ? (
-				<div id={"good-end"}>
+				<div className={"end"}>
 					<img src={""} id={"good-end-img"} alt={"A photo of the good ending"}/>
 					<p className={"ending-text"}>You have found your way out of the land where the Sun has died and the Moon scathes the earth.
 						You have achieved the GOOD ENDING</p>

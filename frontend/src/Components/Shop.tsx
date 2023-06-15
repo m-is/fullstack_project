@@ -35,6 +35,7 @@ export const Shop = () => {
 				const values = Object.values(item);
 				items.push(values[1]);
 			});
+			console.log(items);
 		}
 		
 		if(locationInfo) {
@@ -65,6 +66,10 @@ export const Shop = () => {
 			.catch(err => {
 				console.error(err);
 			});
+		if(!items.includes("sword")){
+			items.push("sword");
+		}
+		setItems(items);
 		setDialogueBuy(true);
 	};
 	
@@ -76,11 +81,20 @@ export const Shop = () => {
 	return(
 		<div className={"shop-page background"}>
 			{ badEnd && <ShopBadEnd/>}
-			<button className={"look-around"} onClick={onLookAround} >Look Around</button>
-			{ dialogue_around && <Dialogue text={`${lookAroundDescription}`}/>}
-			{ items.includes("coin")&&(!items.includes("sword"))&&visited ? <button id={"buy-interaction"} onClick={onBuyInteraction}>Buy Sword</button>	: null}
 			{ dialogue_buy && <Dialogue text={`${buyDescription}`}/>}
-			{ visited&&(!items.includes("sword")) ? <button id={"steal-interaction"} onClick={onStealInteraction}>Steal Sword</button>	: null}
+			{ dialogue_around && <Dialogue text={`${lookAroundDescription}`}/>}
+			<button className={"look-around"} onClick={onLookAround} >Look Around</button>
+			{ visited ? (
+				<>
+					{items.includes("sword") ? null :
+						<>
+							{items.includes("coin")&&<button id={"buy-interaction"} onClick={onBuyInteraction}>Buy Sword</button>}
+							<button id={"steal-interaction"} onClick={onStealInteraction}>Steal Sword</button>
+						</>
+					}
+				</>
+				) : null
+			}
 			<button className={"leave-button"} onClick={navigateToVillage}>Go back</button>
 		</div>
 	);

@@ -25,7 +25,7 @@ export const ShopBadEnd = () => {
 	
 	useEffect( () =>{
 		const gameover = async () => {
-			await httpClient.delete(`/gameover`)
+			await httpClient.put(`/gameover`,{email:auth.userEmail})
 				.then((response) => {
 					console.log(response.status);
 				})
@@ -37,13 +37,13 @@ export const ShopBadEnd = () => {
 		setLocations([]);
 		setInventory([]);
 		gameover();
-	},[]);
+	},[auth.userEmail]);
 	
 	return (
 		<>
 			{showWindow ? (
-					<div>
-						<img src={"shop_bad_end.png"} id={"shop-bad-end"} alt={"A photo of the shopkeeper bad ending"}/>
+					<div className={"end"}>
+						<img src={"shop_bad_end.png"} id={"shop-end-img"} alt={"A photo of the shopkeeper bad ending"}/>
 						<p className={"ending-box"}>You attempt to steal the sword from the mumbling shopkeeper. He doesn't seem to notice but as you retreat a figure emerges from the doorway... and then another... and another...
 							You are suddenly surrounded by beings who all look exactly alike... exactly like the shopkeeper. You never make it out of the shop, and you're never heard from again.
 							You have achieved the BAD ENDING</p>

@@ -166,8 +166,8 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 		}
 	});
 	
-	app.delete("/gameover", async(req, reply) => {
-		
+	app.put<{Body: {email:string}}>("/gameover", async(req, reply) => {
+		const { email } = req.body;
 		let token;
 		
 		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
@@ -181,9 +181,6 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 		
 		else {
 			const decodedToken = await app.firebase.auth().verifyIdToken(token);
-			console.log(decodedToken);
-			
-			const email = decodedToken.email;
 			
 			try{
 				const theUser = await req.em.findOneOrFail(User, { email });
@@ -192,15 +189,18 @@ async function ZorpRoutes(app: FastifyInstance, _options = {}) {
 				//@ts-ignore
 				const inventory = await req.em.find(Item, {user_id: theUser.id});
 			
-				await req.em.removeAndFlush(locations);
-				await req.em.removeAndFlush(inventory);
-			
+				await req.em.remove(locations);
+				
+				await req.em.remove(inventory);
+				
+				await req.em.flush();
+				
 				const newLocation = await req.em.create(Location, {
 					user: theUser,
 					name: "farm",
 					visited: false
 				})
-			
+				
 				await req.em.flush();
 			
 				reply.send(`${theUser.username} has game-overed and is now back at the farm`);

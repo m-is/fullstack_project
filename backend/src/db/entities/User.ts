@@ -15,8 +15,6 @@ export class User extends BaseEntity {
 	@Property()
 	username!: string;
 	
-	@Property()
-	password!: string;
 
 	/*
 	@OneToMany(() => Match, (match) => match.owner, { cascade: [Cascade.PERSIST, Cascade.REMOVE] })
